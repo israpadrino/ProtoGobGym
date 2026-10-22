@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Gob Gym - Prototipo</title>
+<meta name="description" content="Control de miembros, membresías y accesos del gimnasio." />
+<meta name="theme-color" content="#0b0f14" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="./icons/icon.svg" />
+<style>
+:root{--bg:#0b0f14;--panel:#121923;--panel2:#182230;--text:#eef3f8;--muted:#93a4b8;--accent:#7cf4b6;--danger:#ff6b6b;--warn:#ffd166;--line:#243244;--blue:#63a4ff}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#080b10,#0f1720 55%,#0b0f14);color:var(--text);font:15px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}.sidebar{background:#0a0e13;border-right:1px solid var(--line);padding:24px 16px;position:sticky;top:0;height:100vh}.brand{font-size:22px;font-weight:900;letter-spacing:.7px;margin:0 0 6px}.brand span{color:var(--accent)}.sub{color:var(--muted);font-size:12px;margin-bottom:28px}.nav button{width:100%;background:transparent;color:#cbd6e2;border:0;text-align:left;padding:12px 13px;border-radius:12px;margin:4px 0;cursor:pointer;font-weight:700}.nav button.active,.nav button:hover{background:var(--panel2);color:white}.main{padding:28px;max-width:1450px;width:100%;margin:auto}.topbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:24px}.topbar h1{margin:0;font-size:28px}.pill{background:#111923;border:1px solid var(--line);border-radius:999px;padding:9px 14px;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.card{background:linear-gradient(180deg,var(--panel),#0f1620);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 16px 50px #0005}.metric .k{font-size:29px;font-weight:900}.metric .l{color:var(--muted);font-size:13px}.section{display:none}.section.active{display:block}.two{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin-top:18px}.card h3{margin:0 0 14px;font-size:18px}.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}.field label{font-size:12px;color:var(--muted);font-weight:800}.field input,.field select{background:#0c131b;color:white;border:1px solid #2b3a4f;border-radius:12px;padding:12px 13px;outline:none}.field input:focus,.field select:focus{border-color:var(--blue)}.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:900;cursor:pointer;background:var(--accent);color:#07110c}.btn.secondary{background:#1b2837;color:#eef;border:1px solid #33465f}.btn.danger{background:#3a1f24;color:#ffb5b5;border:1px solid #69303b}.actions{display:flex;gap:10px;flex-wrap:wrap}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:15px}table{width:100%;border-collapse:collapse;min-width:760px;background:#0d141d}th,td{padding:12px 14px;border-bottom:1px solid #1d2a3a;text-align:left}th{font-size:12px;color:#9eb0c5;background:#111923;position:sticky;top:0}td{font-size:14px}.status{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border-radius:999px;font-size:12px;font-weight:900}.ok{background:#123427;color:#86f1bd}.bad{background:#3a1b21;color:#ff9797}.soon{background:#3b3113;color:#ffe08a}.avatar{width:44px;height:44px;border-radius:12px;object-fit:cover;background:#263547;border:1px solid #3a4b61}.member-cell{display:flex;align-items:center;gap:10px}.muted{color:var(--muted)}.access-box{max-width:760px;margin:40px auto;text-align:center}.access-box input{font-size:22px;padding:18px;text-align:center;width:100%;border-radius:14px;border:1px solid #33465f;background:#0b121a;color:white}.access-result{margin-top:18px;border-radius:18px;padding:24px;background:#101822;border:1px solid var(--line)}.access-result.big-ok{border-color:#2c6e53;box-shadow:0 0 0 1px #2c6e53 inset}.access-result.big-bad{border-color:#7b303a;box-shadow:0 0 0 1px #7b303a inset}.huge{font-size:34px;font-weight:1000;margin:5px 0}.profile-mini{display:flex;justify-content:center;gap:14px;align-items:center;margin-top:14px}.profile-mini .avatar{width:72px;height:72px;border-radius:18px}.notice{padding:12px 14px;border-radius:12px;background:#111b26;border:1px dashed #3d5067;color:#b9c7d6}.searchbar{display:flex;gap:10px;margin-bottom:14px}.searchbar input{flex:1;background:#0c131b;color:white;border:1px solid #2b3a4f;border-radius:12px;padding:12px 13px}.credential-modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:20px;z-index:20}.credential-modal.open{display:flex}.modal-card{background:#101720;border:1px solid #2b3b4f;border-radius:18px;padding:22px;max-width:650px;width:100%}.credential,.credential-preview{width:85.6mm;height:54mm;background:linear-gradient(135deg,#0d1117,#1f2b38 68%,#112a23);border:1px solid #405168;border-radius:4mm;padding:5mm;color:white;position:relative;overflow:hidden;margin:10px auto;display:grid;grid-template-columns:25mm 1fr 22mm;gap:4mm;align-items:center}.credential:after,.credential-preview:after{content:"";position:absolute;right:-18mm;top:-22mm;width:55mm;height:55mm;border-radius:50%;border:10mm solid #7cf4b61f}.credential-preview-wrap{overflow:auto;padding:2px 0 4px}.preview-help{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}.cred-photo{width:24mm;height:30mm;border-radius:3mm;object-fit:cover;background:#273545;border:1px solid #55708e}.cred-brand{font-size:10px;font-weight:900;letter-spacing:.6px}.cred-name{font-size:16px;font-weight:1000;margin:3px 0}.cred-small{font-size:9px;color:#c6d2de;line-height:1.4}.qr{width:20mm;height:20mm;background:#fff;padding:1.2mm;border-radius:1.5mm;display:grid;grid-template-columns:repeat(11,1fr);grid-template-rows:repeat(11,1fr);gap:.3mm}.qr i{display:block;background:#fff}.qr i.on{background:#000}.cred-code{text-align:center;font-size:8px;margin-top:2mm;color:#d7e4ef}.cred-badge{position:absolute;left:5mm;bottom:3mm;font-size:8px;color:#8df5bd}.empty{padding:26px;text-align:center;color:var(--muted)}
+
+.plan-switch{display:flex;align-items:center;gap:8px;background:#111923;border:1px solid var(--line);border-radius:14px;padding:6px}.plan-switch span{font-size:11px;color:var(--muted);font-weight:900;padding-left:6px}.plan-switch button{border:0;background:transparent;color:#aebdcd;border-radius:9px;padding:8px 11px;cursor:pointer;font-weight:900}.plan-switch button.active{background:var(--accent);color:#07110c}.pro-only.plan-hidden{display:none!important}.pro-tag{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;background:#172d25;color:#8df5bd;border:1px solid #28523e;font-size:10px;font-weight:1000;letter-spacing:.5px}.basic-tag{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;background:#182535;color:#9cc7ff;border:1px solid #2b4766;font-size:10px;font-weight:1000}.checkline{display:flex;gap:10px;align-items:flex-start;background:#0d151e;border:1px solid #26374a;border-radius:12px;padding:12px;margin:4px 0 14px}.checkline input{margin-top:3px}.checkline label{font-size:12px;color:#bdc9d7}.marketing-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}.segment-card{background:#0d151e;border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer}.segment-card:hover,.segment-card.selected{border-color:#4f9a78;background:#102219}.segment-card b{font-size:24px;display:block}.segment-card small{color:var(--muted)}.campaign-preview{background:#091018;border:1px dashed #36506a;border-radius:14px;padding:15px;min-height:140px}.badge-channel{font-size:10px;font-weight:900;padding:4px 7px;border-radius:999px;background:#1a2939;color:#b9d5f4}.upgrade-card{background:linear-gradient(135deg,#122119,#111923);border:1px solid #2d6048;border-radius:16px;padding:16px;margin-top:14px}.contact-stack{font-size:12px;line-height:1.55}.contact-stack .muted{font-size:11px}
+
+.pos-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(320px,.6fr);gap:18px}.pos-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.pos-toolbar input,.pos-toolbar select,.pos-member input{background:#0c131b;color:white;border:1px solid #2b3a4f;border-radius:12px;padding:11px 12px}.pos-toolbar input{min-width:220px;flex:1}.product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.product-card{background:#0d151e;border:1px solid var(--line);border-radius:15px;padding:14px;cursor:pointer;transition:.15s}.product-card:hover{transform:translateY(-2px);border-color:#45637f}.product-card.out{opacity:.45;cursor:not-allowed}.product-emoji{font-size:30px}.product-name{font-weight:900;margin-top:7px}.product-meta{font-size:12px;color:var(--muted);margin-top:2px}.product-price{font-size:20px;font-weight:1000;margin-top:10px;color:var(--accent)}.stock-low{color:var(--warn)!important}.cart-list{max-height:325px;overflow:auto}.cart-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid #1e2b3a}.cart-row .qty{display:flex;align-items:center;gap:7px}.qty button{width:28px;height:28px;border-radius:8px;border:1px solid #34475d;background:#172230;color:white;cursor:pointer;font-weight:900}.pos-total{display:flex;justify-content:space-between;align-items:end;margin:14px 0}.pos-total b{font-size:30px}.money-input{font-size:20px!important;font-weight:900}.change-box{background:#0c1714;border:1px solid #28553f;border-radius:12px;padding:12px;margin:10px 0}.pos-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}.pos-kpis .card{padding:14px}.pos-kpis .k{font-size:23px;font-weight:1000}.sale-ok{padding:12px;border-radius:12px;background:#10251c;border:1px solid #2e6d50;color:#baf7d7;margin-top:12px}.cart-empty{padding:24px 8px;text-align:center;color:var(--muted)}
+@media(max-width:950px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:static;border-right:0;border-bottom:1px solid var(--line)}.nav{display:flex;overflow:auto}.nav button{min-width:max-content}.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.main{padding:18px}}@media(max-width:950px){.marketing-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:760px){.pos-layout{grid-template-columns:1fr}.product-grid{grid-template-columns:repeat(2,1fr)}.pos-kpis{grid-template-columns:1fr}}@media(max-width:560px){.product-grid{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.credential{transform:scale(.83);transform-origin:center;margin:-5mm auto}}
+@media(max-width:560px){.marketing-grid{grid-template-columns:1fr}}@media print{body *{visibility:hidden!important}.credential,.credential *{visibility:visible!important}.credential{position:absolute;left:0;top:0;margin:0;border-radius:0;box-shadow:none}.credential-modal{position:static;background:white;padding:0}.modal-card{border:0;padding:0;background:white}.actions,.modal-card>h3{display:none!important}@page{size:85.6mm 54mm;margin:0}}
+.install-button{display:none}
+.modal-card{max-height:calc(100vh - 40px);overflow-y:auto}
+.owner-sales-button{font-size:14px}
+.notification-list{display:grid;gap:9px}.notification-item{padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#0d151e}.notification-item.unread{border-color:#52735f;background:#102219}.notification-item b{display:block}.notification-item small{display:block;color:var(--muted);margin-top:4px}.notification-empty{padding:12px;color:var(--muted)}.notification-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}.notification-count{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 7px;border-radius:999px;background:#3a3115;color:#ffe08a;font-size:12px;font-weight:900}
+.sync-status{font-size:12px;margin-top:4px;color:var(--muted)}.sync-status.connected{color:#86f1bd}.sync-status.error{color:#ff9797}
+.app[data-role="owner"] #cashierLoginPanel{display:none!important}
+.app[data-role="owner"] [data-cashier-only]{display:none!important}
+.app[data-role="cashier"] [data-owner-only]{display:none!important}
+.owner-totals{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.owner-totals .card{padding:12px}
+.cashier-login{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.cashier-login form select,.cashier-login form input{background:#0c131b;color:white;border:1px solid #2b3a4f;border-radius:10px;padding:9px 11px}
+.receipt{width:74mm;margin:0 auto;padding:4mm;background:white;color:#111;font:12px/1.4 system-ui,sans-serif}
+.receipt h2,.receipt h3,.receipt p{margin:0 0 6px}
+.receipt h2,.receipt h3{text-align:center}
+.receipt hr{border:0;border-top:1px dashed #777;margin:8px 0}
+.receipt-row{display:flex;justify-content:space-between;gap:8px}
+.receipt-items{margin:8px 0}
+@media print{.receipt,.receipt *{visibility:visible!important}.receipt{position:absolute;left:0;top:0;width:74mm;margin:0;padding:2mm;background:white;color:black}body.printing-receipt .receipt-modal{position:static!important;display:block!important;background:white!important;padding:0!important}body.printing-receipt .receipt-modal .modal-card{position:static!important;width:80mm;max-width:none;margin:0;padding:0;border:0;background:white;overflow:visible;max-height:none}body.printing-receipt .receipt-modal .modal-card>h3,body.printing-receipt .receipt-modal .actions{display:none!important}body.printing-receipt .credential-modal:not(.receipt-modal){display:none!important}.credential{position:static!important} @page{size:auto;margin:3mm}}
+[hidden]{display:none!important}
+.role-switch{display:flex;align-items:center;gap:4px;padding:4px;border:1px solid var(--line);border-radius:14px;background:#111923}
+.role-switch button{border:0;border-radius:10px;background:transparent;color:#aebdcd;padding:9px 12px;min-height:40px;font-weight:900;cursor:pointer}
+.role-switch button.active{background:var(--accent);color:#07110c}
+.role-switch button:focus-visible,.nav button:focus-visible,.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.app[data-role="cashier"] [data-owner-only]{display:none!important}
+.product-create-panel{margin:16px 0;padding:16px;border:1px solid #2d6048;border-radius:16px;background:linear-gradient(135deg,#102119,#0d151e)}
+.product-create-panel summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;font-weight:900}
+.product-create-panel summary::-webkit-details-marker{display:none}
+.product-create-panel summary:after{content:"+";display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#1b3327;color:var(--accent);font-size:20px}
+.product-create-panel[open] summary{margin-bottom:14px}
+.product-create-panel[open] summary:after{content:"−"}
+.product-create-panel .product-form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.product-create-panel .field{margin:0}
+.product-create-panel .field input,.product-create-panel .field select{width:100%}
+.product-create-panel .product-form-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px}
+.product-create-panel .product-form-preview{display:flex;align-items:center;gap:10px;color:var(--muted)}
+.product-create-panel .product-form-preview span{font-size:26px}
+.product-create-panel .product-form-message{min-height:22px;margin-top:10px}
+@media(max-width:760px){.product-create-panel .product-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.product-create-panel .product-form-grid{grid-template-columns:1fr}}
+@media(max-width:950px){
+  .topbar{align-items:flex-start}
+  .topbar>div:last-child{width:100%}
+  .topbar h1{font-size:25px}
+  .pos-layout{grid-template-columns:minmax(0,1fr) minmax(280px,.8fr)}
+}
+@media(max-width:700px){
+  body{min-height:100dvh}
+  .app{display:block;min-height:100dvh}
+  .sidebar{position:fixed;z-index:10;inset:auto 0 0;height:auto;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:#0a0e13f5;border-right:0;border-top:1px solid var(--line);backdrop-filter:blur(16px)}
+  .brand,.sub{display:none}
+  .nav{gap:5px;scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav button{flex:1 0 auto;min-width:78px;min-height:48px;margin:0;padding:9px 11px;text-align:center;font-size:12px}
+  .main{padding:16px 14px calc(88px + env(safe-area-inset-bottom))}
+  .topbar{gap:12px;margin-bottom:18px}
+  .topbar>div:last-child{gap:8px!important}
+  .topbar>div:last-child>*{max-width:100%}
+  .role-switch{width:100%;display:grid;grid-template-columns:1fr 1fr}
+  .role-switch button{min-height:44px}
+  .plan-switch{margin-right:auto}
+  .pill{font-size:12px}
+  .grid,.marketing-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card{padding:14px;border-radius:15px}
+  .metric .k{font-size:25px}
+  .two{gap:12px;margin-top:12px}
+  .pos-layout{grid-template-columns:1fr}
+  .pos-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .product-card{padding:12px}
+  .searchbar,.pos-toolbar{flex-direction:column;align-items:stretch}
+  .searchbar input,.pos-toolbar input,.pos-toolbar select{width:100%;min-width:0}
+  .cashier-login{align-items:stretch}
+  .cashier-login form{width:100%}
+  .cashier-login form select,.cashier-login form input{flex:1;min-width:0}
+  .access-box{margin:10px auto}
+  .access-box input{font-size:18px;padding:16px 12px}
+}
+@media(max-width:430px){
+  .main{padding-left:11px;padding-right:11px}
+  .grid,.marketing-grid,.pos-kpis,.product-grid{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr}
+  .topbar h1{font-size:23px}
+  .topbar>div:last-child{align-items:stretch!important}
+  .plan-switch{justify-content:center}
+  .topbar .pill{align-self:flex-start}
+  .actions .btn{flex:1 1 auto}
+  .owner-totals{grid-template-columns:1fr}
+  .profile-mini{align-items:flex-start}
+  .modal-card{padding:16px}
+}
+</style>
+</head>
+<body>
+<div class="app" data-role="cashier">
+  <aside class="sidebar">
+    <div class="brand">Gob Gym <span>ACCESS</span></div>
+    <div class="sub">Control de miembros y POS<br><span id="sidebarPlan" class="pro-tag" style="margin-top:8px">EDICIÓN PRO</span></div>
+    <div class="nav">
+      <button class="active" data-go="dashboard" data-owner-only hidden>▦ Dashboard <span class="notification-count" id="ownerNotificationBadge" hidden>0</span></button>
+      <button data-go="register" data-cashier-only>＋ Registrar miembro</button>
+      <button data-go="members">👥 Miembros</button>
+      <button data-go="access" data-cashier-only>◉ Control de acceso</button>
+      <button data-go="history" data-owner-only hidden>↺ Historial</button>
+      <button data-go="marketing" id="marketingNav" data-owner-only hidden>✦ Marketing</button>
+      <button data-go="pos" id="posNav" data-cashier-only>🛒 POS Tienda</button>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="topbar"><div><h1 id="pageTitle">Control de acceso</h1><div class="muted">Control de membresías y acceso del gimnasio</div><div id="cloudSyncStatus" class="sync-status" role="status" aria-live="polite">Conectando a la sincronización...</div></div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div class="role-switch" role="group" aria-label="Seleccionar interfaz"><button id="cashierModeBtn" type="button" class="active" aria-pressed="true">Mostrador</button><button id="ownerModeBtn" type="button" aria-pressed="false">Dueño</button></div><button class="btn secondary install-button" id="installApp" type="button">Instalar app</button><div class="pill" id="today"></div></div></div>
+    <div class="notice cashier-login" id="cashierLoginPanel" style="display:none;margin-bottom:18px"><b id="cashierStatus">Turno sin iniciar.</b><div id="cashierSetupHelp" hidden><span>Primero el dueño debe registrar el usuario de caja.</span><button class="btn secondary" id="cashierSetupButton" type="button">Configurar usuario y turno</button></div><form id="cashierForm" class="actions" style="align-items:center"><select id="cashierSelect" required aria-label="Usuario de recepción"></select><input id="cashierPin" type="password" inputmode="numeric" autocomplete="current-password" minlength="4" maxlength="8" pattern="[0-9]{4,8}" required placeholder="PIN de recepción" aria-label="PIN de recepción"><button type="submit" class="btn secondary">Iniciar / cambiar turno</button></form></div>
+
+    <section class="section active" id="dashboard">
+      <div class="card" data-owner-only hidden>
+        <div class="notification-toolbar"><div><h3 style="margin:0">Avisos administrativos</h3><div class="muted">Nuevos socios y productos con stock bajo en este dispositivo.</div></div><div class="actions"><span class="status soon" id="ownerNotificationCount">0 pendientes</span><button type="button" class="btn secondary" id="enableOwnerNotifications">Activar avisos del navegador</button><button type="button" class="btn secondary" id="markNotificationsRead">Marcar leídos</button></div></div>
+        <div id="ownerNotificationStatus" class="muted" aria-live="polite" style="margin-bottom:10px"></div>
+        <div id="ownerNotificationList" class="notification-list" aria-live="polite"></div>
+      </div>
+      <div class="grid">
+        <div class="card metric"><div class="k" id="mActive">0</div><div class="l">Miembros activos</div></div>
+        <div class="card metric"><div class="k" id="mExpired">0</div><div class="l">Membresías vencidas</div></div>
+        <div class="card metric"><div class="k" id="mVisits">0</div><div class="l">Visitas de hoy</div></div>
+        <div class="card metric"><div class="k" id="mSoon">0</div><div class="l">Por vencer (7 días)</div></div>
+        <div class="card metric"><div class="k"><button type="button" class="btn secondary owner-sales-button">Ventas privadas</button></div><div class="l">Solo el dueño puede consultar las ventas</div><span id="mSalesToday" hidden></span></div>
+        <div class="card metric"><div class="k" id="mNewMembersToday">0</div><div class="l">Nuevos registros hoy</div></div>
+      </div>
+      <div class="two">
+        <div class="card"><h3>Últimos accesos</h3><div id="recentAccess"></div></div>
+        <div class="card"><h3>Próximos vencimientos</h3><div id="soonList"></div></div>
+      </div>
+      <div class="two">
+        <div class="card"><h3>Ventas del día</h3><div class="notice">El detalle y los importes son privados. El dueño puede consultarlos con su PIN.</div><div id="dailySales" hidden></div><button type="button" class="btn secondary owner-sales-button" style="margin-top:12px">Consulta del dueño</button></div>
+        <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">Nuevos miembros</h3><button class="btn secondary" type="button" data-go="members">Ver registros</button></div><div id="recentRegistrations" style="margin-top:8px"></div></div>
+      </div>
+      <div class="card" style="margin-top:18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">Stock de productos</h3><div class="actions"><span class="status ok" id="dashboardProductCount">0 productos</span><span class="status soon" id="dashboardLowStockCount">0 con stock bajo</span><button class="btn secondary" id="managePermissions" type="button">Ventas y permisos del dueño</button></div></div>
+        <details class="product-create-panel">
+          <summary>Agregar producto al inventario</summary>
+          <form id="productForm">
+            <div class="product-form-grid">
+              <div class="field"><label for="productName">NOMBRE DEL PRODUCTO</label><input id="productName" name="name" required maxlength="80" pattern="[^<>]+" title="No uses los caracteres &lt; o &gt;." autocomplete="off" placeholder="Ej. Proteína Whey 2 lb"></div>
+              <div class="field"><label for="productCategoryNew">CATEGORÍA</label><select id="productCategoryNew" name="category" required><option value="Suplementos">Suplementos</option><option value="Bebidas">Bebidas</option><option value="Snacks">Snacks</option><option value="Accesorios">Accesorios</option></select></div>
+              <div class="field"><label for="productPriceNew">PRECIO (MXN)</label><input id="productPriceNew" name="price" type="number" min="0.01" step="0.01" required placeholder="Ej. 399.00"></div>
+              <div class="field"><label for="productStockNew">EXISTENCIAS INICIALES</label><input id="productStockNew" name="stock" type="number" min="0" step="1" required placeholder="Ej. 10"></div>
+            </div>
+            <div class="product-form-actions">
+              <div class="product-form-preview"><label for="productEmojiNew">ICONO</label><select id="productEmojiNew" name="emoji" aria-label="Icono del producto"><option value="🥤">🥤 Suplemento</option><option value="⚡">⚡ Energía</option><option value="💧">💧 Bebida</option><option value="🍫">🍫 Snack</option><option value="💪">💪 Accesorio</option><option value="🏋️">🏋️ Equipo</option></select><span id="productEmojiPreview" aria-hidden="true">🥤</span></div>
+              <button class="btn" type="submit">Guardar producto</button>
+            </div>
+            <div class="product-form-message muted" id="productFormMessage" aria-live="polite"></div>
+          </form>
+        </details>
+        <div id="dashboardInventory" style="margin-top:10px"></div>
+        <form id="restockForm" style="margin-top:16px">
+          <h3>Registrar reposición</h3>
+          <div class="row">
+            <div class="field"><label>PRODUCTO</label><select id="restockProduct" required></select></div>
+            <div class="field"><label>CANTIDAD RECIBIDA</label><input id="restockQuantity" type="number" min="1" step="1" required placeholder="Ej. 10"></div>
+          </div>
+          <div class="row">
+            <div class="field"><label>CÓDIGO DE UN SOLO USO DEL DUEÑO</label><input id="restockCode" inputmode="numeric" autocomplete="one-time-code" required placeholder="Código de autorización"></div>
+            <div class="field" style="justify-content:flex-end"><button class="btn" type="submit">Autorizar y sumar stock</button></div>
+          </div>
+          <div id="restockMessage" aria-live="polite"></div>
+        </form>
+        <div style="margin-top:18px"><h3>Últimas reposiciones</h3><div id="restockHistory"></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="register">
+      <div class="two">
+        <div class="card">
+          <h3>Nuevo miembro</h3>
+          <div class="notice" style="margin-bottom:14px">Registra la huella del socio con el lector USB antes de guardar. El sistema asocia el identificador que envía el lector al perfil; no imprime una credencial.</div>
+          <form id="memberForm">
+            <div class="row"><div class="field"><label>NOMBRE COMPLETO</label><input id="name" required placeholder="Ej. Carlos Hernández" /></div><div class="field"><label>TELÉFONO</label><input id="phone" required placeholder="222 000 0000" /></div></div>
+            <div class="row"><div class="field"><label>FECHA DE NACIMIENTO</label><input id="birth" type="date" /></div><div class="field"><label>CORREO PARA PROMOCIONES</label><input id="email" type="email" placeholder="correo@ejemplo.com" /></div></div>
+                <div class="row"><div class="field"><label>WHATSAPP</label><input id="whatsapp" placeholder="Ej. 222 555 0134" /></div><div class="field"><label>CANAL PREFERIDO</label><select id="contactPref"><option value="whatsapp">WhatsApp</option><option value="email">Correo</option><option value="both">WhatsApp y correo</option></select></div></div>
+                <div class="checkline"><input id="promoConsent" type="checkbox"><label for="promoConsent"><b>Acepta recibir promociones y ofertas.</b><br>El socio autoriza que el gimnasio use los datos de contacto proporcionados para comunicaciones comerciales. Puede solicitar dejar de recibirlas.</label></div>
+            <div class="row"><div class="field"><label>TIPO DE MEMBRESÍA</label><select id="plan"><option value="day">Visita / 1 día</option><option value="month" selected>Mensual</option><option value="3month">Trimestral</option><option value="6month">Semestral</option><option value="year">Anual</option></select></div><div class="field"><label>FECHA DE INICIO</label><input id="start" type="date" required /></div></div>
+            <div class="field"><label>IMPORTE COBRADO POR LA MEMBRESÍA (MXN)</label><input id="membershipAmount" type="number" min="0" step="0.01" required placeholder="Ej. 500.00"><small class="muted">Se registra el pago y se imprime el ticket. Para cortesía, escribe 0.</small></div>
+            <div class="field"><label for="fingerprintId">HUELLA DEL SOCIO · LECTOR USB</label><input id="fingerprintId" type="text" required maxlength="128" autocomplete="off" autocapitalize="characters" placeholder="Haz clic aquí y pasa el dedo por el lector"><small class="muted">El lector debe comparar la huella y enviar un identificador único como teclado USB HID. Escanea una sola vez por socio.</small></div>
+            <div class="field"><label>FOTOGRAFÍA</label><input id="photo" type="file" accept="image/*" /></div>
+            <div class="actions"><button class="btn" type="submit">Registrar socio y pago</button><button class="btn secondary" type="button" id="fillDemo">Llenar ejemplo</button></div>
+            <div id="membershipMessage" aria-live="polite" style="margin-top:12px"></div>
+          </form>
+        </div>
+        <div class="card">
+          <h3>Registro con huella</h3>
+          <div class="notice">1. Completa los datos del socio y el pago.<br>2. Selecciona el campo “Huella del socio”.<br>3. Pasa el dedo por el lector; el código recibido se asociará al perfil.<br>4. Guarda el registro. En el control de acceso, el mismo lector buscará al socio y marcará su entrada.</div>
+          <p class="muted" style="margin-top:14px">El prototipo no captura ni guarda imágenes o plantillas biométricas: el lector tendría que validar la huella y enviar un identificador. Esta integración provisional requiere modo teclado USB HID; muchos lectores necesitan el SDK del fabricante. Los identificadores se guardan en este navegador, sin sincronización. Habrá que probarlo cuando tengamos el modelo.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="members">
+      <div class="card"><h3>Miembros registrados</h3><div class="searchbar"><input id="memberSearch" placeholder="Buscar por nombre, teléfono o número de socio" /></div><div id="membersTable"></div></div>
+    </section>
+
+    <section class="section" id="access">
+      <div class="access-box card">
+        <h3>Control de acceso</h3><p class="muted">Selecciona el campo y pasa el dedo por el lector USB para identificar al socio y registrar su entrada.</p><input id="accessCode" autocomplete="off" autocapitalize="characters" placeholder="Escanea la huella con el lector USB" autofocus /><div class="actions" style="justify-content:center;margin-top:12px"><button class="btn" id="checkAccess">Registrar entrada</button></div><div id="accessResult"></div>
+      </div>
+    </section>
+
+
+    <section class="section" id="marketing">
+      <div class="grid" style="margin-bottom:18px">
+        <div class="card metric"><div class="k" id="mkOptin">0</div><div class="l">Aceptan promociones</div></div>
+        <div class="card metric"><div class="k" id="mkSoon">0</div><div class="l">Vencen en 7 días</div></div>
+        <div class="card metric"><div class="k" id="mkExpired">0</div><div class="l">Membresías vencidas</div></div>
+        <div class="card metric"><div class="k" id="mkInactive">0</div><div class="l">Sin visita en 30 días</div></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap"><div><h3 style="margin-bottom:4px">Campañas y promociones</h3><div class="muted">Selecciona a quién quieres contactar y prepara la campaña.</div></div><span class="status ok">Consentimiento requerido</span></div>
+        <div class="marketing-grid" id="segmentCards" style="margin-top:18px"></div>
+        <div class="two">
+          <div>
+            <div class="row"><div class="field"><label>CANAL</label><select id="campaignChannel"><option value="whatsapp">WhatsApp</option><option value="email">Correo</option><option value="both">WhatsApp + correo</option></select></div><div class="field"><label>SEGMENTO</label><select id="campaignSegment"><option value="all">Todos los que aceptaron promociones</option><option value="soon">Próximos a vencer</option><option value="expired">Membresía vencida</option><option value="inactive">Sin visita en 30 días</option><option value="active">Miembros activos</option></select></div></div>
+            <div class="field"><label>ASUNTO / NOMBRE DE CAMPAÑA</label><input id="campaignSubject" value="Oferta especial para miembros" /></div>
+            <div class="field"><label>MENSAJE</label><textarea id="campaignMessage" style="min-height:120px;background:#0c131b;color:white;border:1px solid #2b3a4f;border-radius:12px;padding:12px 13px;resize:vertical">Hola {nombre} 👋 Tenemos una promoción especial para ti en el gimnasio. ¡Pregunta en recepción por los detalles!</textarea></div>
+            <div class="actions"><button class="btn" id="previewCampaign" type="button">Preparar campaña</button><button class="btn secondary" id="simulateCampaign" type="button">Simular envío</button></div>
+          </div>
+          <div><h3>Vista previa</h3><div class="campaign-preview" id="campaignPreview">Selecciona un segmento y prepara la campaña.</div></div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section" id="pos">
+      <div class="pos-kpis">
+        <div class="card"><div class="k">Ventas privadas</div><div class="muted">El dueño consulta el corte con su PIN</div></div>
+        <div class="card"><button type="button" class="btn secondary owner-sales-button">Corte del dueño</button></div>
+        <div class="card"><div class="k" id="posLowStock">0</div><div class="muted">Productos con stock bajo</div></div>
+      </div>
+      <div class="pos-layout">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap"><div><h3 style="margin-bottom:4px">Punto de venta</h3><div class="muted">Proteínas, suplementos, bebidas, snacks y accesorios.</div></div><span class="status ok">MXN</span></div>
+          <div class="pos-toolbar" style="margin-top:16px"><input id="productSearch" placeholder="Buscar proteína, creatina, bebida..."><select id="productCategory"><option value="all">Todas las categorías</option><option value="Suplementos">Suplementos</option><option value="Bebidas">Bebidas</option><option value="Snacks">Snacks</option><option value="Accesorios">Accesorios</option></select></div>
+          <div class="product-grid" id="productGrid"></div>
+        </div>
+        <div class="card">
+          <h3>Venta actual</h3>
+          <div class="notice" style="margin-bottom:12px">Cada turno inicia sesión desde la barra superior. La caja no muestra importes ni historial de ventas.</div>
+          <div class="pos-member field"><label>SOCIO (OPCIONAL)</label><input id="posMemberCode" placeholder="Ej. GYM-0001"><small class="muted" id="posMemberName">Venta a público general</small></div>
+          <div class="cart-list" id="cartList"></div>
+          <div class="pos-total"><span class="muted">TOTAL</span><b id="cartTotal">$0.00</b></div>
+          <div class="field"><label>EFECTIVO RECIBIDO</label><input class="money-input" id="cashReceived" type="number" min="0" step="1" placeholder="$0"></div>
+          <div class="actions" style="margin-bottom:8px"><button type="button" class="btn secondary quick-cash" data-cash="100">+$100</button><button type="button" class="btn secondary quick-cash" data-cash="200">+$200</button><button type="button" class="btn secondary quick-cash" data-cash="500">+$500</button><button type="button" class="btn secondary quick-cash" data-cash="1000">+$1000</button></div>
+          <div class="change-box"><div class="muted">Cambio</div><b id="cashChange" style="font-size:22px">$0.00</b></div>
+          <div class="actions"><button type="button" class="btn" id="paySale">Cobrar venta</button><button type="button" class="btn danger" id="clearCart">Cancelar</button></div>
+          <div id="saleMessage"></div>
+        </div>
+      </div>
+      <div class="notice" style="margin-top:18px">Los tickets se imprimen al cobrar. El historial de ventas está protegido con el PIN del dueño.</div>
+    </section>
+
+    <section class="section" id="history">
+      <div class="card"><h3>Historial de accesos</h3><div id="historyTable"></div></div>
+    </section>
+  </main>
+</div>
+
+<div class="credential-modal" id="fingerprintModal">
+  <div class="modal-card">
+    <h3>Vincular huella a socio existente</h3>
+    <p id="fingerprintLinkMember" class="muted"></p>
+    <form id="fingerprintLinkForm">
+      <div class="field"><label for="fingerprintLinkValue">IDENTIFICADOR DE HUELLA · LECTOR USB</label><input id="fingerprintLinkValue" type="text" required maxlength="128" autocomplete="off" autocapitalize="characters" placeholder="Selecciona aquí y pasa el dedo"></div>
+      <div id="fingerprintLinkMessage" aria-live="polite" style="margin-bottom:12px"></div>
+      <div class="actions"><button class="btn" type="submit">Guardar huella</button><button class="btn secondary" type="button" id="closeFingerprintModal">Cancelar</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="credential-modal" id="cashierChangeModal">
+  <div class="modal-card">
+    <h3>Recordatorio de corte de caja</h3>
+    <p id="cashierChangeMessage" class="muted"></p>
+    <div class="notice" style="margin:14px 0">Antes de terminar tu turno, recuerda realizar y entregar el corte de caja. Este recordatorio no bloquea el cambio de usuario.</div>
+    <div class="actions">
+      <button class="btn" type="button" id="cashierChangeAfterCut">Hacer simulación del corte</button>
+      <button class="btn secondary" type="button" id="cashierChangeWithoutCut">Cambiar sin corte</button>
+      <button class="btn secondary" type="button" id="cancelCashierChange">Seguir en este turno</button>
+    </div>
+  </div>
+</div>
+
+<div class="credential-modal" id="cashierCutModal">
+  <div class="modal-card">
+    <h3>Simulación del corte de caja</h3>
+    <p id="cashierCutShift" class="muted"></p>
+    <div class="grid owner-totals">
+      <div class="card"><div class="metric k" id="cashierCutProducts">$0.00</div><div class="muted">Productos</div></div>
+      <div class="card"><div class="metric k" id="cashierCutMemberships">$0.00</div><div class="muted">Membresías</div></div>
+      <div class="card"><div class="metric k" id="cashierCutExpected">$0.00</div><div class="muted">Efectivo esperado</div></div>
+    </div>
+    <form id="cashierCutForm">
+      <div class="field" style="margin-top:14px"><label for="cashierCutCounted">EFECTIVO DE VENTAS CONTADO (MXN)</label><input id="cashierCutCounted" type="number" min="0" step="0.01" required placeholder="Ej. 1250.00"><small class="muted">No incluyas el fondo inicial de caja; compara solo el efectivo de las ventas.</small></div>
+      <div id="cashierCutDifference" class="notice" aria-live="polite">Captura el efectivo contado para calcular la diferencia.</div>
+      <div id="cashierCutMessage" aria-live="polite" style="margin-top:10px"></div>
+      <div class="actions" style="margin-top:14px"><button class="btn" type="submit">Confirmar corte y cambiar turno</button><button class="btn secondary" type="button" id="cancelCashierCut">Volver al recordatorio</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="credential-modal" id="securityModal">
+  <div class="modal-card">
+    <h3>Panel privado del dueño</h3>
+    <div class="notice" style="margin-bottom:14px">El corte y los permisos solo se muestran después de validar el PIN del dueño. Configura los usuarios de caja y genera códigos de un solo uso para autorizar reposiciones. En este prototipo los datos permanecen en este navegador; no se sincronizan ni cuentan con la protección de un servidor.</div>
+    <form id="ownerSetupForm" style="display:none">
+      <div class="field"><label>CREA EL PIN DEL DUEÑO (4 A 8 DÍGITOS)</label><input id="ownerSetupPin" type="password" inputmode="numeric" minlength="4" maxlength="8" pattern="[0-9]{4,8}" autocomplete="new-password" required></div>
+      <button class="btn" type="submit">Configurar PIN del dueño</button>
+    </form>
+    <form id="ownerLoginForm" style="display:none">
+      <div class="field"><label>PIN DEL DUEÑO</label><input id="ownerLoginPin" type="password" inputmode="numeric" minlength="4" maxlength="8" pattern="[0-9]{4,8}" autocomplete="current-password" required></div>
+      <button class="btn" type="submit">Ver corte y permisos</button>
+    </form>
+    <div id="ownerAdminPanel" style="display:none">
+      <h3>Ventas y pagos del día</h3>
+      <div class="grid owner-totals">
+        <div class="card"><div class="metric k" id="ownerProductTotal">$0</div><div class="muted">Productos</div></div>
+        <div class="card"><div class="metric k" id="ownerMembershipTotal">$0</div><div class="muted">Membresías</div></div>
+        <div class="card"><div class="metric k" id="ownerCombinedTotal">$0</div><div class="muted">Total del día</div></div>
+      </div>
+      <div id="ownerSalesTable" style="margin:12px 0"></div>
+      <hr style="border:0;border-top:1px solid #243244;margin:18px 0">
+      <h3>Cortes de caja</h3>
+      <div id="cashierShiftCuts" style="margin:12px 0"></div>
+      <hr style="border:0;border-top:1px solid #243244;margin:18px 0">
+      <h3>Usuarios de caja</h3>
+      <form id="cashierCreateForm">
+        <div class="row"><div class="field"><label>NOMBRE / TURNO</label><input id="cashierName" required maxlength="40" placeholder="Ej. Recepción · Turno mañana"></div><div class="field"><label>PIN PERSONAL (4 A 8 DÍGITOS)</label><input id="cashierCreatePin" type="password" inputmode="numeric" minlength="4" maxlength="8" pattern="[0-9]{4,8}" autocomplete="new-password" required></div></div>
+        <button class="btn secondary" type="submit">Agregar usuario de caja</button>
+      </form>
+      <div id="cashierAccountsList" style="margin:12px 0"></div>
+      <hr style="border:0;border-top:1px solid #243244;margin:18px 0">
+      <h3>Código de reposición</h3>
+      <p class="muted">Entrega el código a recepción. Autoriza una sola reposición y vence en 24 horas.</p>
+      <button class="btn" type="button" id="generateRestockCode">Generar código de un solo uso</button>
+      <div id="generatedRestockCode" class="notice" style="display:none;margin-top:12px" aria-live="polite"></div>
+    </div>
+    <div id="ownerAuthMessage" aria-live="polite" style="margin-top:12px"></div>
+    <div class="actions" style="justify-content:flex-end;margin-top:18px"><button class="btn secondary" type="button" id="closeSecurity">Cerrar</button></div>
+  </div>
+</div>
+
+<div class="credential-modal receipt-modal" id="receiptModal">
+  <div class="modal-card">
+    <h3>Ticket de pago</h3>
+    <div class="receipt" id="receiptContent"></div>
+    <div class="actions" style="justify-content:center;margin-top:14px"><button class="btn" type="button" id="printReceipt">Imprimir ticket</button><button class="btn secondary" type="button" id="closeReceipt">Cerrar</button></div>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);const $$=s=>[...document.querySelectorAll(s)];
+const KEY='gym_access_members_v2', HKEY='gym_access_history_v2', PKEY='gym_rental_plan_v2', PRODKEY='gym_pos_products_v1', SALESKEY='gym_pos_sales_v1';
+const OWNERKEY='gym_owner_pin_v1', CASHIERKEY='gym_cashier_users_v1', GRANTKEY='gym_restock_grants_v1', RESTOCKHISTORYKEY='gym_restock_history_v1', PAYMENTKEY='gym_membership_payments_v1', SHIFTKEY='gym_cashier_shift_cuts_v1', OPENSHIFTKEY='gym_cashier_open_shift_v1', NOTIFYKEY='gym_owner_notifications_v1', LOWSTOCKKEY='gym_owner_low_stock_notified_v1';
+let members=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem('gym_access_members_v1')||'[]');
+let history=JSON.parse(localStorage.getItem(HKEY)||localStorage.getItem('gym_access_history_v1')||'[]');
+let rentalPlan='pro';
+const defaultProducts=[
+{id:'P001',name:'Proteína Whey 2 lb',category:'Suplementos',price:799,stock:8,emoji:'🥤'},
+{id:'P002',name:'Creatina Monohidratada',category:'Suplementos',price:399,stock:10,emoji:'⚡'},
+{id:'P003',name:'Pre-entreno',category:'Suplementos',price:449,stock:5,emoji:'🔥'},
+{id:'P004',name:'BCAA',category:'Suplementos',price:329,stock:4,emoji:'💪'},
+{id:'P005',name:'Agua 1 L',category:'Bebidas',price:25,stock:24,emoji:'💧'},
+{id:'P006',name:'Bebida deportiva',category:'Bebidas',price:38,stock:14,emoji:'🧃'},
+{id:'P007',name:'Barra de proteína',category:'Snacks',price:45,stock:18,emoji:'🍫'},
+{id:'P008',name:'Shaker',category:'Accesorios',price:159,stock:7,emoji:'🧋'},
+{id:'P009',name:'Toalla deportiva',category:'Accesorios',price:120,stock:6,emoji:'🧻'}
+];
+let products=JSON.parse(localStorage.getItem(PRODKEY)||'null')||defaultProducts;
+let sales=JSON.parse(localStorage.getItem(SALESKEY)||'[]');
+let membershipPayments=JSON.parse(localStorage.getItem(PAYMENTKEY)||'[]');
+let ownerPin=JSON.parse(localStorage.getItem(OWNERKEY)||'null');
+let cashiers=JSON.parse(localStorage.getItem(CASHIERKEY)||'[]');
+let restockGrants=JSON.parse(localStorage.getItem(GRANTKEY)||'[]');
+let restockHistory=JSON.parse(localStorage.getItem(RESTOCKHISTORYKEY)||'[]');
+let cashierShiftCuts=JSON.parse(localStorage.getItem(SHIFTKEY)||'[]');
+let openCashierShift=JSON.parse(localStorage.getItem(OPENSHIFTKEY)||'null');
+let ownerNotifications=JSON.parse(localStorage.getItem(NOTIFYKEY)||'[]');
+let lowStockNotified=JSON.parse(localStorage.getItem(LOWSTOCKKEY)||'[]');
+let activeCashier=null;
+let pendingCashier=null;
+let currentRole='cashier';
+let ownerUnlocked=false;
+let pendingOwnerMode=false;
+let cart=[];
+const notificationChannel='BroadcastChannel' in window?new BroadcastChannel('gym-owner-notifications'):null;
+const shownNotificationIds=new Set();
+ownerNotifications.forEach(notification=>shownNotificationIds.add(notification.id));
+let memberSaveSnapshot=new Map(members.map(member=>[member.code,JSON.stringify(member)]));
+let productSaveSnapshot=new Map(products.map(product=>[product.id,JSON.stringify(product)]));
+let cashierSaveSnapshot=new Map(cashiers.map(cashier=>[cashier.id,JSON.stringify(cashier)]));
+let cloudReady=false;
+let cloudRevision=0;
+let cloudSyncTimer=null;
+let cloudPollTimer=null;
+let cloudSyncInFlight=false;
+let cloudSyncQueued=false;
+const sharedStateStorageKeys={members:KEY,history:HKEY,rentalPlan:PKEY,products:PRODKEY,sales:SALESKEY,membershipPayments:PAYMENTKEY,ownerPin:OWNERKEY,cashiers:CASHIERKEY,restockGrants:GRANTKEY,restockHistory:RESTOCKHISTORYKEY,cashierShiftCuts:SHIFTKEY,openCashierShift:OPENSHIFTKEY,ownerNotifications:NOTIFYKEY,lowStockNotified:LOWSTOCKKEY};
+const sharedArrayKeys={members:'code',history:'id',products:'id',sales:'folio',membershipPayments:'folio',cashiers:'id',restockGrants:'id',restockHistory:'id',cashierShiftCuts:'id',ownerNotifications:'id',lowStockNotified:null};
+function readSharedState(){let state={};for(let [name,key] of Object.entries(sharedStateStorageKeys)){let raw=localStorage.getItem(key);if(raw!==null){try{state[name]=JSON.parse(raw)}catch(error){console.error(`No se pudo leer ${name} para sincronizar:`,error)}}}return state}
+function sharedRecordKey(value,key,index){if(key===null)return String(value);if(value&&typeof value==='object'){if(value[key]!=null)return String(value[key]);if(key==='id'){if(value.ts)return `${value.ts}:${value.code||value.cashierId||value.productId||value.cashierName||value.productName||index}`;if(value.hash)return `${value.hash}:${value.expiresAt||''}`;if(value.cashierId&&value.endedAt)return `${value.cashierId}:${value.endedAt}`}}return `legacy:${index}:${JSON.stringify(value)}`}
+function mergeSharedStates(primary,secondary){let result={...primary};for(let [name,value] of Object.entries(secondary||{})){if(!Array.isArray(value)){if(!(name in result)||(result[name]==null&&value!=null))result[name]=value;continue}let records=new Map(),key=Object.hasOwn(sharedArrayKeys,name)?sharedArrayKeys[name]:'id';for(let [index,item] of (Array.isArray(result[name])?result[name]:[]).entries())records.set(sharedRecordKey(item,key,index),item);for(let [index,item] of value.entries()){let id=sharedRecordKey(item,key,index),existing=records.get(id);if(existing?.updatedAt&&(!item.updatedAt||Date.parse(existing.updatedAt)>Date.parse(item.updatedAt)))continue;records.set(id,item)}result[name]=[...records.values()]}return result}
+function applySharedState(state){for(let [name,value] of Object.entries(state||{})){let key=sharedStateStorageKeys[name];if(!key)continue;localStorage.setItem(key,JSON.stringify(value))}members=JSON.parse(localStorage.getItem(KEY)||'[]');history=JSON.parse(localStorage.getItem(HKEY)||'[]');rentalPlan=localStorage.getItem(PKEY)||'basic';products=JSON.parse(localStorage.getItem(PRODKEY)||'null')||defaultProducts;sales=JSON.parse(localStorage.getItem(SALESKEY)||'[]');membershipPayments=JSON.parse(localStorage.getItem(PAYMENTKEY)||'[]');ownerPin=JSON.parse(localStorage.getItem(OWNERKEY)||'null');cashiers=JSON.parse(localStorage.getItem(CASHIERKEY)||'[]');restockGrants=JSON.parse(localStorage.getItem(GRANTKEY)||'[]');restockHistory=JSON.parse(localStorage.getItem(RESTOCKHISTORYKEY)||'[]');cashierShiftCuts=JSON.parse(localStorage.getItem(SHIFTKEY)||'[]');openCashierShift=JSON.parse(localStorage.getItem(OPENSHIFTKEY)||'null');ownerNotifications=JSON.parse(localStorage.getItem(NOTIFYKEY)||'[]');lowStockNotified=JSON.parse(localStorage.getItem(LOWSTOCKKEY)||'[]');ownerNotifications.forEach(notification=>shownNotificationIds.add(notification.id));memberSaveSnapshot=new Map(members.map(member=>[member.code,JSON.stringify(member)]));productSaveSnapshot=new Map(products.map(product=>[product.id,JSON.stringify(product)]));cashierSaveSnapshot=new Map(cashiers.map(cashier=>[cashier.id,JSON.stringify(cashier)]));updateRentalPlanUI()}
+function setCloudStatus(message,state=''){let status=$('#cloudSyncStatus');status.textContent=message;status.className=`sync-status ${state}`}
+function queueCloudSync(){if(!cloudReady)return;cloudSyncQueued=true;clearTimeout(cloudSyncTimer);cloudSyncTimer=setTimeout(flushCloudSync,500)}
+async function flushCloudSync(){if(!cloudReady||cloudSyncInFlight||!cloudSyncQueued)return;cloudSyncQueued=false;cloudSyncInFlight=true;setCloudStatus('Sincronizando con Cloudflare...');try{let response=await fetch('./api/sync',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({state:readSharedState()})});let result=await response.json();if(!response.ok)throw new Error(result.error||`Error HTTP ${response.status}`);cloudRevision=result.revision||cloudRevision;setCloudStatus('Sincronizado con Cloudflare','connected')}catch(error){console.error('No se pudo sincronizar con Cloudflare:',error);setCloudStatus(`Sin conexión; se conservan los datos locales. ${error.message}`,'error');cloudSyncQueued=true;setTimeout(()=>queueCloudSync(),5000)}finally{cloudSyncInFlight=false;if(cloudSyncQueued)queueCloudSync()}}
+async function pollCloudState(){try{let response=await fetch(`./api/sync?since=${cloudRevision}`,{cache:'no-store'});let result=await response.json();if(!response.ok)throw new Error(result.error||`Error HTTP ${response.status}`);if(result.revision>cloudRevision&&result.state){let merged=mergeSharedStates(result.state,readSharedState());applySharedState(merged);cloudRevision=result.revision;renderAll();setCloudStatus('Sincronizado con Cloudflare','connected')}}catch(error){console.error('No se pudo consultar la sincronización de Cloudflare:',error);setCloudStatus(`Sin conexión; se conservan los datos locales. ${error.message}`,'error')}}
+async function startCloudSync(){setCloudStatus('Conectando a Cloudflare...');try{let response=await fetch('./api/sync',{cache:'no-store'});let result=await response.json();if(!response.ok)throw new Error(result.error||`Error HTTP ${response.status}`);let local=readSharedState();if(result.state){applySharedState(mergeSharedStates(result.state,local));cloudRevision=result.revision||0}else{cloudRevision=0}cloudReady=true;renderAll();if(!result.state||JSON.stringify(readSharedState())!==JSON.stringify(result.state))queueCloudSync();else setCloudStatus('Sincronizado con Cloudflare','connected');clearInterval(cloudPollTimer);cloudPollTimer=setInterval(pollCloudState,5000)}catch(error){console.error('No se pudo iniciar la sincronización de Cloudflare:',error);setCloudStatus(`API no configurada o sin conexión. Se conservan los datos locales. ${error.message}`,'error');clearTimeout(cloudPollTimer);cloudPollTimer=setTimeout(startCloudSync,15000)}}
+function stampChangedRecords(records,snapshots,key){let next=new Map();for(let record of records){let id=record[key],serialized=JSON.stringify(record);if(snapshots.has(id)&&snapshots.get(id)!==serialized)record.updatedAt=new Date().toISOString();else if(!snapshots.has(id)&&!record.updatedAt)record.updatedAt=new Date().toISOString();next.set(id,JSON.stringify(record))}snapshots.clear();for(let [id,value] of next)snapshots.set(id,value)}
+const save=()=>{stampChangedRecords(members,memberSaveSnapshot,'code');stampChangedRecords(products,productSaveSnapshot,'id');stampChangedRecords(cashiers,cashierSaveSnapshot,'id');localStorage.setItem(KEY,JSON.stringify(members));localStorage.setItem(HKEY,JSON.stringify(history));localStorage.setItem(PKEY,rentalPlan);localStorage.setItem(PRODKEY,JSON.stringify(products));localStorage.setItem(SALESKEY,JSON.stringify(sales));localStorage.setItem(PAYMENTKEY,JSON.stringify(membershipPayments));localStorage.setItem(OWNERKEY,JSON.stringify(ownerPin));localStorage.setItem(CASHIERKEY,JSON.stringify(cashiers));localStorage.setItem(GRANTKEY,JSON.stringify(restockGrants));localStorage.setItem(RESTOCKHISTORYKEY,JSON.stringify(restockHistory));localStorage.setItem(SHIFTKEY,JSON.stringify(cashierShiftCuts));localStorage.setItem(OPENSHIFTKEY,JSON.stringify(openCashierShift));queueCloudSync()};
+function randomHex(length=16){let bytes=new Uint8Array(length);crypto.getRandomValues(bytes);return [...bytes].map(b=>b.toString(16).padStart(2,'0')).join('')}
+async function hashPin(pin,salt=randomHex()){let data=new TextEncoder().encode(`${salt}:${pin}`),digest=await crypto.subtle.digest('SHA-256',data);return {salt,hash:[...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('')}}
+async function matchesPin(pin,credential){let result=await hashPin(pin,credential.salt);return result.hash===credential.hash}
+function escapeHTML(value){return String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}
+const iso=d=>{let x=new Date(d);return [x.getFullYear(),String(x.getMonth()+1).padStart(2,'0'),String(x.getDate()).padStart(2,'0')].join('-')};const fmt=d=>new Date(d+'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+function addPlan(start,plan){let d=new Date(start+'T12:00:00');if(plan==='day')d.setDate(d.getDate()+1);if(plan==='month')d.setMonth(d.getMonth()+1);if(plan==='3month')d.setMonth(d.getMonth()+3);if(plan==='6month')d.setMonth(d.getMonth()+6);if(plan==='year')d.setFullYear(d.getFullYear()+1);return iso(d)}
+function planLabel(p){return {day:'Visita',month:'Mensual','3month':'Trimestral','6month':'Semestral',year:'Anual'}[p]||p}
+function daysLeft(end){let t=new Date();t.setHours(0,0,0,0);let e=new Date(end+'T00:00:00');return Math.ceil((e-t)/86400000)}
+function memberStatus(m){let d=daysLeft(m.end);if(m.suspended)return ['Suspendido','bad'];if(d<0)return ['Vencido','bad'];if(d<=7)return ['Por vencer','soon'];return ['Activo','ok']}
+function renderOwnerNotifications(){let unread=ownerNotifications.filter(notification=>!notification.read).length,list=$('#ownerNotificationList');if(!list)return;$('#ownerNotificationCount').textContent=`${unread} pendiente${unread===1?'':'s'}`;let badge=$('#ownerNotificationBadge');badge.textContent=unread;badge.hidden=unread===0;list.innerHTML=ownerNotifications.length?ownerNotifications.slice(0,8).map(notification=>`<div class="notification-item ${notification.read?'':'unread'}"><b>${escapeHTML(notification.title)}</b><span>${escapeHTML(notification.message)}</span><small>${new Date(notification.ts).toLocaleString('es-MX')}</small></div>`).join(''):'<div class="notification-empty">No hay avisos todavía.</div>';let enableButton=$('#enableOwnerNotifications'),status=$('#ownerNotificationStatus');if(!('Notification' in window)){enableButton.disabled=true;status.textContent='Este navegador no permite notificaciones del sistema. Los avisos quedan guardados en esta pantalla.'}else if(Notification.permission==='granted'){enableButton.disabled=true;enableButton.textContent='Avisos del navegador activados';status.textContent='Este dispositivo puede mostrar avisos cuando la app esté abierta en el perfil del dueño.'}else if(Notification.permission==='denied'){enableButton.disabled=true;status.textContent='Las notificaciones del navegador están bloqueadas. Puedes revisar el permiso en la configuración del navegador.'}else{enableButton.disabled=false;enableButton.textContent='Activar avisos del navegador';status.textContent='Activa los avisos para recibir notificaciones en este dispositivo mientras la app esté abierta.'}}
+function showOwnerBrowserNotification(notification){if(currentRole!=='owner'||!ownerUnlocked||!('Notification' in window)||Notification.permission!=='granted'||shownNotificationIds.has(notification.id))return;shownNotificationIds.add(notification.id);let options={body:notification.message,icon:'./icons/icon.svg',tag:notification.id};if('serviceWorker' in navigator)navigator.serviceWorker.ready.then(registration=>registration.showNotification(notification.title,options)).catch(error=>console.error('No se pudo mostrar el aviso del dueño:',error));else new Notification(notification.title,options)}
+function receiveOwnerNotification(notification){if(!notification||!notification.id)return;let exists=ownerNotifications.some(item=>item.id===notification.id);if(!exists){ownerNotifications=[notification,...ownerNotifications].slice(0,100);localStorage.setItem(NOTIFYKEY,JSON.stringify(ownerNotifications));queueCloudSync()}renderOwnerNotifications();showOwnerBrowserNotification(notification)}
+function notifyOwner(type,title,message){let now=new Date().toISOString(),notification={id:randomHex(10),type,title,message,ts:now,updatedAt:now,read:false};ownerNotifications=[notification,...ownerNotifications].slice(0,100);localStorage.setItem(NOTIFYKEY,JSON.stringify(ownerNotifications));queueCloudSync();renderOwnerNotifications();if(notificationChannel)notificationChannel.postMessage(notification);showOwnerBrowserNotification(notification)}
+function syncLowStockNotifications(){let lowStock=products.filter(product=>Number(product.stock)<=3),lowIds=new Set(lowStock.map(product=>product.id));lowStockNotified=lowStockNotified.filter(id=>lowIds.has(id));lowStock.forEach(product=>{if(lowStockNotified.includes(product.id))return;lowStockNotified.push(product.id);notifyOwner('low_stock','Stock bajo',`${product.name}: quedan ${product.stock} unidad${product.stock===1?'':'es'}.`)});localStorage.setItem(LOWSTOCKKEY,JSON.stringify(lowStockNotified))}
+if(notificationChannel)notificationChannel.addEventListener('message',event=>receiveOwnerNotification(event.data));
+window.addEventListener('storage',event=>{if(event.key===NOTIFYKEY){let incoming=JSON.parse(event.newValue||'[]');let newItems=incoming.filter(notification=>!ownerNotifications.some(item=>item.id===notification.id));ownerNotifications=incoming;renderOwnerNotifications();newItems.forEach(showOwnerBrowserNotification);return}if(event.key===KEY)members=JSON.parse(event.newValue||'[]');else if(event.key===HKEY)history=JSON.parse(event.newValue||'[]');else if(event.key===PRODKEY)products=JSON.parse(event.newValue||'[]');else if(event.key===SALESKEY)sales=JSON.parse(event.newValue||'[]');else if(event.key===PAYMENTKEY)membershipPayments=JSON.parse(event.newValue||'[]');else if(event.key===SHIFTKEY)cashierShiftCuts=JSON.parse(event.newValue||'[]');else if(event.key===CASHIERKEY)cashiers=JSON.parse(event.newValue||'[]');else if(event.key===LOWSTOCKKEY)lowStockNotified=JSON.parse(event.newValue||'[]');else return;renderAll()});
+$('#enableOwnerNotifications').addEventListener('click',async()=>{let status=$('#ownerNotificationStatus');if(!('Notification' in window)){status.textContent='Este navegador no admite notificaciones del sistema.';return}try{let permission=await Notification.requestPermission();renderOwnerNotifications();if(permission==='granted')status.textContent='Avisos del navegador activados en este dispositivo.';else if(permission==='denied')status.textContent='El permiso fue rechazado. Puedes habilitarlo desde la configuración del navegador.'}catch(error){console.error('No se pudo solicitar permiso de notificaciones:',error);status.textContent='No se pudo activar el permiso de notificaciones en este navegador.'}});
+$('#markNotificationsRead').addEventListener('click',()=>{let updatedAt=new Date().toISOString();ownerNotifications=ownerNotifications.map(notification=>({...notification,read:true,updatedAt}));localStorage.setItem(NOTIFYKEY,JSON.stringify(ownerNotifications));queueCloudSync();renderOwnerNotifications()});
+function placeholder(name){let initials=(name||'GY').split(' ').slice(0,2).map(x=>x[0]).join('').toUpperCase();return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='300' height='360'><rect width='100%' height='100%' fill='#273545'/><text x='50%' y='52%' text-anchor='middle' dominant-baseline='middle' fill='#b9c8d8' font-size='90' font-family='Arial' font-weight='700'>${initials}</text></svg>`)}`}
+function codeFor(n){return 'GYM-'+String(n).padStart(4,'0')}
+function updateRentalPlanUI(){rentalPlan='pro';localStorage.setItem(PKEY,rentalPlan);$('#sidebarPlan').textContent='EDICIÓN PRO'}
+
+function renderDashboard(){let active=0,exp=0,soon=0;members.forEach(m=>{let s=memberStatus(m)[0];if(s==='Vencido')exp++;else if(s==='Por vencer'){active++;soon++;}else if(s==='Activo')active++});let today=iso(new Date()),todaySales=sales.filter(s=>s.date===today),todayRegistrations=members.filter(m=>m.created&&iso(m.created)===today);$('#mActive').textContent=active;$('#mExpired').textContent=exp;$('#mSoon').textContent=soon;$('#mVisits').textContent=history.filter(h=>h.date===today).length;$('#mSalesToday').textContent=money(todaySales.reduce((total,sale)=>total+Number(sale.total||0),0));$('#mNewMembersToday').textContent=todayRegistrations.length;let recent=history.slice().reverse().slice(0,6);$('#recentAccess').innerHTML=recent.length?recent.map(h=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #1d2a3a"><span><b>${h.name}</b><br><small class="muted">${h.code}</small></span><span class="muted">${h.time}</span></div>`).join(''):'<div class="empty">Aún no hay accesos.</div>';let s=members.filter(m=>daysLeft(m.end)>=0&&daysLeft(m.end)<=7).sort((a,b)=>daysLeft(a.end)-daysLeft(b.end)).slice(0,7);$('#soonList').innerHTML=s.length?s.map(m=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #1d2a3a"><span><b>${m.name}</b><br><small class="muted">${m.code}</small></span><span class="status soon">${daysLeft(m.end)} días</span></div>`).join(''):'<div class="empty">No hay vencimientos próximos.</div>';$('#dailySales').innerHTML=todaySales.length?todaySales.slice().reverse().map(sale=>`<div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #1d2a3a"><span><b>${sale.folio}</b><br><small class="muted">${sale.time} · ${sale.memberName||'Público general'}</small></span><b>${money(sale.total)}</b></div>`).join(''):'<div class="empty">Aún no hay ventas hoy.</div>';let registrations=members.filter(m=>m.created).slice().sort((a,b)=>new Date(b.created)-new Date(a.created)).slice(0,6);$('#recentRegistrations').innerHTML=registrations.length?registrations.map(m=>`<div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #1d2a3a"><span><b>${m.name}</b><br><small class="muted">${m.code} · ${planLabel(m.plan)}</small></span><span class="muted">${new Date(m.created).toLocaleDateString('es-MX',{day:'2-digit',month:'short'})}</span></div>`).join(''):'<div class="empty">Aún no hay miembros registrados.</div>';let lowStock=products.filter(p=>p.stock<=3);$('#dashboardProductCount').textContent=`${products.length} producto${products.length===1?'':'s'}`;$('#dashboardLowStockCount').textContent=`${lowStock.length} con stock bajo`;let inventory=products.slice().sort((a,b)=>a.stock-b.stock);$('#dashboardInventory').innerHTML=inventory.length?`<div class="table-wrap"><table style="min-width:0"><thead><tr><th>Producto</th><th>Categoría</th><th>Existencias</th><th>Estado</th></tr></thead><tbody>${inventory.map(p=>{let status=p.stock<=0?['Agotado','bad']:p.stock<=3?['Stock bajo','soon']:['Disponible','ok'];return `<tr><td>${p.emoji} ${p.name}</td><td>${p.category}</td><td><b>${p.stock}</b></td><td><span class="status ${status[1]}">${status[0]}</span></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">No hay productos registrados.</div>'}
+function renderOwnerSalesReport(){let today=iso(new Date()),productSales=sales.filter(s=>s.date===today),memberSales=membershipPayments.filter(p=>p.date===today),productTotal=productSales.reduce((sum,sale)=>sum+Number(sale.total||0),0),membershipTotal=memberSales.reduce((sum,payment)=>sum+Number(payment.amount||0),0),transactions=[...productSales.map(sale=>({type:'Productos',folio:sale.folio,time:sale.time,cashierName:sale.cashierName,customer:sale.memberName||'Público general',detail:sale.items.map(item=>`${item.qty}× ${item.name}`).join(', '),amount:sale.total,ts:sale.ts})),...memberSales.map(payment=>({type:'Membresía',folio:payment.folio,time:payment.time,cashierName:payment.cashierName,customer:`${payment.memberName} · ${payment.memberCode}`,detail:planLabel(payment.plan),amount:payment.amount,ts:payment.ts}))].sort((a,b)=>new Date(b.ts)-new Date(a.ts));$('#ownerProductTotal').textContent=money(productTotal);$('#ownerMembershipTotal').textContent=money(membershipTotal);$('#ownerCombinedTotal').textContent=money(productTotal+membershipTotal);$('#ownerSalesTable').innerHTML=transactions.length?`<div class="table-wrap"><table style="min-width:760px"><thead><tr><th>Hora</th><th>Tipo / folio</th><th>Atendió</th><th>Cliente</th><th>Detalle</th><th>Total</th></tr></thead><tbody>${transactions.map(tx=>`<tr><td>${escapeHTML(tx.time)}</td><td>${tx.type} · ${escapeHTML(tx.folio)}</td><td>${escapeHTML(tx.cashierName||'Sin usuario')}</td><td>${escapeHTML(tx.customer)}</td><td>${escapeHTML(tx.detail)}</td><td><b>${money(tx.amount)}</b></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Aún no hay ventas ni pagos registrados hoy.</div>'}
+function renderCashierShiftCuts(){let rows=cashierShiftCuts.slice().reverse();$('#cashierShiftCuts').innerHTML=rows.length?`<div class="table-wrap"><table style="min-width:720px"><thead><tr><th>Usuario</th><th>Inicio</th><th>Cierre</th><th>Esperado</th><th>Contado</th><th>Diferencia</th><th>Estado</th></tr></thead><tbody>${rows.map(cut=>`<tr><td>${escapeHTML(cut.cashierName)}</td><td>${new Date(cut.startedAt).toLocaleString('es-MX')}</td><td>${new Date(cut.endedAt).toLocaleString('es-MX')}</td><td>${money(cut.expectedCash)}</td><td>${cut.cutCompleted?money(cut.countedCash):'—'}</td><td>${cut.cutCompleted?money(cut.difference):'—'}</td><td>${cut.cutCompleted?(cut.difference===0?'Completo':cut.difference>0?'Sobrante':'Faltante'):'Sin corte'}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Aún no hay cortes de caja registrados.</div>'}
+function renderDashboardSales(){$('#mSalesToday').textContent='Privado';const target=$('#dailySales');if(target)target.innerHTML='<div class="notice">El detalle y los importes son privados. El dueño puede consultarlos con su PIN.</div>'}
+function renderRestockForm(){let select=$('#restockProduct'),selected=select.value;select.innerHTML=products.map(p=>`<option value="${escapeHTML(p.id)}">${escapeHTML(p.name)} · Stock: ${p.stock}</option>`).join('');if(products.some(p=>p.id===selected))select.value=selected;$('#restockForm').querySelector('button[type="submit"]').disabled=!products.length}
+function renderRestockHistory(){let recent=restockHistory.slice().reverse().slice(0,10);$('#restockHistory').innerHTML=recent.length?recent.map(entry=>`<div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #1d2a3a"><span><b>${escapeHTML(entry.productName)}</b><br><small class="muted">+${entry.quantity} unidades · ${escapeHTML(entry.cashierName)}</small></span><span class="muted">${new Date(entry.ts).toLocaleString('es-MX',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>`).join(''):'<div class="empty">Aún no hay reposiciones registradas.</div>'}
+function renderCashierState(){let select=$('#cashierSelect'),selected=select.value;select.innerHTML=cashiers.map(c=>`<option value="${escapeHTML(c.id)}">${escapeHTML(c.name)}</option>`).join('');if(cashiers.some(c=>c.id===selected))select.value=selected;select.disabled=!cashiers.length;$('#cashierLoginPanel').style.display=currentRole==='cashier'?'flex':'none';$('#cashierSetupHelp').hidden=cashiers.length>0;$('#cashierForm').style.display=cashiers.length?'flex':'none';$('#cashierStatus').textContent=activeCashier?`Turno activo: ${activeCashier.name}`:cashiers.length?'Turno sin iniciar.':'Aún no hay un turno iniciado.'}
+function renderCashierAccounts(){let target=$('#cashierAccountsList'),rows=cashiers.map(c=>`<tr><td>${escapeHTML(c.name)}</td><td><button class="btn danger" type="button" data-remove-cashier="${escapeHTML(c.id)}">Eliminar</button></td></tr>`).join('');target.innerHTML=cashiers.length?`<div class="table-wrap"><table style="min-width:0"><thead><tr><th>Usuario</th><th>Acción</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<div class="empty">Todavía no hay usuarios de caja. Agrega uno por cada turno.</div>'}
+function setInterfaceRole(role){currentRole=role;$('.app').dataset.role=role;$$('[data-owner-only]').forEach(element=>element.hidden=role!=='owner');$$('[data-cashier-only]').forEach(element=>element.hidden=role!=='cashier');$('#ownerModeBtn').classList.toggle('active',role==='owner');$('#ownerModeBtn').setAttribute('aria-pressed',String(role==='owner'));$('#cashierModeBtn').classList.toggle('active',role==='cashier');$('#cashierModeBtn').setAttribute('aria-pressed',String(role==='cashier'));navigate(role==='owner'?'dashboard':'access');renderCashierState();renderOwnerNotifications()}
+function chooseOwnerMode(){if(ownerUnlocked){setInterfaceRole('owner');return}pendingOwnerMode=true;openOwnerModal()}
+function openOwnerModal(){let configured=!!ownerPin;$('#ownerSetupForm').style.display=configured?'none':'block';$('#ownerLoginForm').style.display=configured?'block':'none';$('#ownerAdminPanel').style.display=ownerUnlocked?'block':'none';$('#ownerAuthMessage').textContent='';$('#generatedRestockCode').style.display='none';$('#ownerLoginPin').value='';$('#ownerSetupPin').value='';if(ownerUnlocked){renderCashierAccounts();renderOwnerSalesReport();renderCashierShiftCuts()}$('#securityModal').classList.add('open')}
+function closeOwnerModal(){pendingOwnerMode=false;$('#securityModal').classList.remove('open')}
+$('#managePermissions').addEventListener('click',openOwnerModal);$$('.owner-sales-button').forEach(button=>button.addEventListener('click',openOwnerModal));$('#closeSecurity').addEventListener('click',closeOwnerModal);$('#securityModal').addEventListener('click',event=>{if(event.target.id==='securityModal')closeOwnerModal()});
+$('#ownerSetupForm').addEventListener('submit',async event=>{event.preventDefault();try{ownerPin=await hashPin($('#ownerSetupPin').value);save();ownerUnlocked=true;$('#ownerSetupForm').style.display='none';$('#ownerAdminPanel').style.display='block';$('#ownerAuthMessage').textContent='PIN del dueño configurado.';renderCashierAccounts();renderOwnerSalesReport();renderCashierShiftCuts();if(pendingOwnerMode){pendingOwnerMode=false;setInterfaceRole('owner');closeOwnerModal()}}catch(error){console.error('No se pudo configurar el PIN del dueño:',error);$('#ownerAuthMessage').textContent='No se pudo configurar el PIN en este navegador seguro.'}});
+$('#ownerLoginForm').addEventListener('submit',async event=>{event.preventDefault();try{if(!await matchesPin($('#ownerLoginPin').value,ownerPin)){ $('#ownerAuthMessage').textContent='PIN incorrecto.';return }ownerUnlocked=true;$('#ownerLoginForm').style.display='none';$('#ownerAdminPanel').style.display='block';$('#ownerAuthMessage').textContent='';renderCashierAccounts();renderOwnerSalesReport();renderCashierShiftCuts();if(pendingOwnerMode){pendingOwnerMode=false;setInterfaceRole('owner');closeOwnerModal()}}catch(error){console.error('No se pudo verificar el PIN del dueño:',error);$('#ownerAuthMessage').textContent='No se pudo verificar el PIN en este navegador seguro.'}});
+$('#cashierCreateForm').addEventListener('submit',async event=>{event.preventDefault();let name=$('#cashierName').value.trim(),pin=$('#cashierCreatePin').value;if(cashiers.some(c=>c.name.toLowerCase()===name.toLowerCase())){$('#ownerAuthMessage').textContent='Ya existe un usuario con ese nombre.';return}try{cashiers.push({id:randomHex(8),name,updatedAt:new Date().toISOString(),...await hashPin(pin)});save();event.target.reset();renderCashierAccounts();renderCashierState();$('#ownerAuthMessage').textContent=`Usuario de caja ${name} agregado.`}catch(error){console.error('No se pudo agregar el usuario de caja:',error);$('#ownerAuthMessage').textContent='No se pudo guardar el usuario en este navegador seguro.'}});
+$('#cashierAccountsList').addEventListener('click',event=>{let button=event.target.closest('[data-remove-cashier]');if(!button)return;let id=button.dataset.removeCashier;cashiers=cashiers.filter(c=>c.id!==id);if(activeCashier?.id===id)activeCashier=null;save();renderCashierAccounts();renderCashierState()});
+$('#generateRestockCode').addEventListener('click',async()=>{try{let random=new Uint32Array(1);crypto.getRandomValues(random);let code=String(100000+random[0]%900000),now=new Date().toISOString();restockGrants.push({id:randomHex(8),...await hashPin(code),expiresAt:Date.now()+24*60*60*1000,updatedAt:now});save();let output=$('#generatedRestockCode');output.textContent=`Código de un solo uso: ${code} · Válido por 24 horas. Entrégalo a recepción.`;output.style.display='block'}catch(error){console.error('No se pudo generar el código de reposición:',error);$('#ownerAuthMessage').textContent='No se pudo generar el código en este navegador seguro.'}});
+function cashierShiftTotals(cashier,endedAt=new Date().toISOString()){let start=Date.parse(cashier.startedAt||0),end=Date.parse(endedAt),inShift=record=>record.cashierId===cashier.id&&record.ts&&Date.parse(record.ts)>=start&&Date.parse(record.ts)<=end,productTotal=sales.filter(inShift).reduce((sum,sale)=>sum+Number(sale.total||0),0),membershipTotal=membershipPayments.filter(inShift).reduce((sum,payment)=>sum+Number(payment.amount||0),0);return {productTotal,membershipTotal,expectedCash:productTotal+membershipTotal}}
+function renderCashierCutDifference(){let counted=Number($('#cashierCutCounted').value),difference=counted-cutTotals.expectedCash;if(!$('#cashierCutCounted').value||!Number.isFinite(counted)){$('#cashierCutDifference').textContent='Captura el efectivo contado para calcular la diferencia.';return}$('#cashierCutDifference').textContent=difference===0?`Caja completa: ${money(difference)} de diferencia.`:difference>0?`Sobrante: ${money(difference)}.`:`Faltante: ${money(Math.abs(difference))}.`}
+let cutTotals={productTotal:0,membershipTotal:0,expectedCash:0};
+function openCashierCut(){if(!activeCashier||!pendingCashier)return;cutTotals=cashierShiftTotals(activeCashier);$('#cashierCutShift').textContent=`Cajero: ${activeCashier.name} · Inicio de turno: ${new Date(activeCashier.startedAt).toLocaleString('es-MX')}`;$('#cashierCutProducts').textContent=money(cutTotals.productTotal);$('#cashierCutMemberships').textContent=money(cutTotals.membershipTotal);$('#cashierCutExpected').textContent=money(cutTotals.expectedCash);$('#cashierCutForm').reset();$('#cashierCutDifference').textContent='Captura el efectivo contado para calcular la diferencia.';$('#cashierCutMessage').textContent='';$('#cashierChangeModal').classList.remove('open');$('#cashierCutModal').classList.add('open');$('#cashierCutCounted').focus()}
+function finishCashierShift(countedCash=null){if(!activeCashier||!pendingCashier)return;let endedAt=new Date().toISOString(),totals=cashierShiftTotals(activeCashier,endedAt),cutCompleted=countedCash!==null,record={cashierId:activeCashier.id,cashierName:activeCashier.name,startedAt:activeCashier.startedAt,endedAt,...totals,cutCompleted,countedCash,difference:cutCompleted?countedCash-totals.expectedCash:null},nextShift={id:pendingCashier.id,name:pendingCashier.name,startedAt:new Date().toISOString()},previousShift=openCashierShift;cashierShiftCuts.push(record);openCashierShift=nextShift;try{save()}catch(error){cashierShiftCuts.pop();openCashierShift=previousShift;throw error}$('#cashierCutModal').classList.remove('open');activeCashier=nextShift;pendingCashier=null;$('#cashierChangeModal').classList.remove('open');$('#cashierPin').value='';renderCashierState();if($('#ownerAdminPanel').style.display==='block')renderCashierShiftCuts()}
+function cancelCashierCut(){if(!pendingCashier)return;$('#cashierCutModal').classList.remove('open');$('#cashierChangeModal').classList.add('open')}
+$('#cashierCutCounted').addEventListener('input',renderCashierCutDifference);
+$('#cashierCutForm').addEventListener('submit',event=>{event.preventDefault();let counted=Number($('#cashierCutCounted').value);if(!Number.isFinite(counted)||counted<0){$('#cashierCutMessage').textContent='Ingresa un efectivo contado válido.';return}try{finishCashierShift(counted)}catch(error){console.error('No se pudo guardar el corte de caja:',error);$('#cashierCutMessage').textContent='No se pudo guardar el corte en este navegador.'}});
+$('#cashierChangeAfterCut').addEventListener('click',openCashierCut);
+$('#cashierChangeWithoutCut').addEventListener('click',()=>{try{finishCashierShift()}catch(error){console.error('No se pudo cerrar el turno sin corte:',error);$('#cashierStatus').textContent='No se pudo registrar el cierre de turno en este navegador.'}});
+$('#cancelCashierCut').addEventListener('click',cancelCashierCut);
+$('#cashierCutModal').addEventListener('click',event=>{if(event.target.id==='cashierCutModal')cancelCashierCut()});
+$('#cancelCashierChange').addEventListener('click',()=>{pendingCashier=null;$('#cashierChangeModal').classList.remove('open');if(activeCashier)$('#cashierSelect').value=activeCashier.id});
+$('#cashierChangeModal').addEventListener('click',event=>{if(event.target.id==='cashierChangeModal')$('#cancelCashierChange').click()});
+$('#cashierForm').addEventListener('submit',async event=>{event.preventDefault();let cashier=cashiers.find(c=>c.id===$('#cashierSelect').value);if(!cashier){$('#cashierStatus').textContent='El dueño debe registrar primero los usuarios de caja.';return}try{if(!await matchesPin($('#cashierPin').value,cashier)){$('#cashierStatus').textContent='PIN incorrecto; el turno no cambió.';return}if(activeCashier?.id===cashier.id){$('#cashierPin').value='';renderCashierState();return}if(activeCashier&&cart.length){$('#cashierStatus').textContent='Cobra o cancela la venta actual antes de cambiar de usuario.';return}if(activeCashier){pendingCashier=cashier;$('#cashierChangeMessage').textContent=`${activeCashier.name}, tu turno está por terminar.`;$('#cashierPin').value='';$('#cashierChangeModal').classList.add('open');return}if(openCashierShift){activeCashier={...openCashierShift,startedAt:openCashierShift.startedAt||new Date().toISOString()};if(activeCashier.id===cashier.id){openCashierShift=activeCashier;save();$('#cashierPin').value='';renderCashierState();return}pendingCashier=cashier;$('#cashierChangeMessage').textContent=`${activeCashier.name}, tu turno está por terminar.`;$('#cashierPin').value='';$('#cashierChangeModal').classList.add('open');return}activeCashier={id:cashier.id,name:cashier.name,startedAt:new Date().toISOString()};openCashierShift=activeCashier;save();$('#cashierPin').value='';renderCashierState()}catch(error){console.error('No se pudo iniciar o verificar el turno de caja:',error);$('#cashierStatus').textContent='No se pudo verificar o iniciar el turno en este navegador seguro.'}});
+$('#restockForm').addEventListener('submit',async event=>{event.preventDefault();let product=products.find(p=>p.id===$('#restockProduct').value),quantity=Number($('#restockQuantity').value),code=$('#restockCode').value.trim(),message=$('#restockMessage');if(!product||!Number.isSafeInteger(quantity)||quantity<1){message.textContent='Selecciona un producto e ingresa una cantidad válida.';return}try{let grantIndex=-1;for(let index=0;index<restockGrants.length;index++){let grant=restockGrants[index];if(!grant.consumedAt&&grant.expiresAt>Date.now()&&await matchesPin(code,grant)){grantIndex=index;break}}if(grantIndex<0){message.textContent='Código inválido, vencido o ya utilizado. Solicita uno nuevo al dueño.';return}let now=new Date().toISOString();product.stock+=quantity;product.updatedAt=now;restockHistory.push({productName:product.name,quantity,newStock:product.stock,cashierName:activeCashier?.name||'Recepción',ts:now});restockGrants[grantIndex].consumedAt=now;restockGrants[grantIndex].updatedAt=now;$('#restockCode').value='';$('#restockQuantity').value='';save();renderAll();message.textContent=`Reposición registrada: ${quantity} unidades de ${product.name}. Nuevo stock: ${product.stock}.`}catch(error){console.error('No se pudo autorizar la reposición:',error);message.textContent='No se pudo validar el código en este navegador seguro.'}});
+function contactHTML(m){let lines=[];if(m.whatsapp)lines.push(`WhatsApp: ${m.whatsapp}`);if(m.email)lines.push(`Correo: ${m.email}`);if(m.promoConsent)lines.push('<span class="status ok" style="padding:3px 6px">Promos ✓</span>');return lines.length?`<div class="contact-stack">${lines.join('<br>')}</div>`:'<span class="muted">Sin contacto promocional</span>'}
+function renderMembers(filter=''){let f=filter.toLowerCase().trim();let list=members.filter(m=>!f||m.name.toLowerCase().includes(f)||(m.phone||'').includes(f)||m.code.toLowerCase().includes(f)||(m.email||'').toLowerCase().includes(f)||(m.whatsapp||'').includes(f));if(!list.length){$('#membersTable').innerHTML='<div class="empty">No hay miembros registrados.</div>';return}let contactHead=rentalPlan==='pro'?'<th>Contacto Pro</th>':'';$('#membersTable').innerHTML=`<div class="table-wrap"><table><thead><tr><th>Miembro</th><th>Plan</th><th>Vencimiento</th><th>Registro</th><th>Visitas</th>${contactHead}<th>Estado</th><th>Acciones</th></tr></thead><tbody>${list.map(m=>{let st=memberStatus(m);let contact=rentalPlan==='pro'?`<td>${contactHTML(m)}</td>`:'';let registered=m.created?new Date(m.created).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}):'—';return `<tr><td><div class="member-cell"><img class="avatar" src="${m.photo||placeholder(m.name)}"><div><b>${m.name}</b><br><small class="muted">${m.code} · ${m.phone||'Sin teléfono'}</small></div></div></td><td>${planLabel(m.plan)}</td><td>${fmt(m.end)}</td><td>${registered}</td><td>${m.visits||0}</td>${contact}<td><span class="status ${st[1]}">${st[0]}</span></td><td><div class="actions"><button class="btn secondary" onclick="registerFingerprint('${m.code}')">${m.fingerprintId?'Actualizar huella':'Vincular huella'}</button><button class="btn secondary" onclick="renew('${m.code}')">Renovar</button></div></td></tr>`}).join('')}</tbody></table></div>`}
+function renderHistory(){if(!history.length){$('#historyTable').innerHTML='<div class="empty">No hay accesos registrados.</div>';return}$('#historyTable').innerHTML=`<div class="table-wrap"><table><thead><tr><th>Socio</th><th>Nombre</th><th>Fecha</th><th>Hora</th><th>Resultado</th></tr></thead><tbody>${history.slice().reverse().map(h=>`<tr><td>${h.code}</td><td>${h.name}</td><td>${fmt(h.date)}</td><td>${h.time}</td><td><span class="status ok">Permitido</span></td></tr>`).join('')}</tbody></table></div>`}
+function lastVisitDays(code){let hs=history.filter(h=>h.code===code).sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));if(!hs.length)return 9999;return Math.floor((Date.now()-new Date(hs[0].ts||hs[0].date).getTime())/86400000)}
+function eligible(m){return !!m.promoConsent && (!!m.whatsapp||!!m.email)}
+function segmentList(seg){let base=members.filter(eligible);if(seg==='soon')return base.filter(m=>daysLeft(m.end)>=0&&daysLeft(m.end)<=7);if(seg==='expired')return base.filter(m=>daysLeft(m.end)<0);if(seg==='inactive')return base.filter(m=>lastVisitDays(m.code)>=30);if(seg==='active')return base.filter(m=>daysLeft(m.end)>=0&&!m.suspended);return base}
+function renderMarketing(){let all=members.filter(eligible),soon=segmentList('soon'),expired=segmentList('expired'),inactive=segmentList('inactive');$('#mkOptin').textContent=all.length;$('#mkSoon').textContent=soon.length;$('#mkExpired').textContent=expired.length;$('#mkInactive').textContent=inactive.length;let cards=[['all','Aceptan promociones',all.length],['soon','Próximos a vencer',soon.length],['expired','Membresía vencida',expired.length],['inactive','Sin visita 30 días',inactive.length]];$('#segmentCards').innerHTML=cards.map(([id,label,n])=>`<div class="segment-card ${$('#campaignSegment').value===id?'selected':''}" data-seg="${id}"><b>${n}</b><small>${label}</small></div>`).join('');$$('.segment-card').forEach(c=>c.onclick=()=>{$('#campaignSegment').value=c.dataset.seg;renderMarketing();previewCampaign()})}
+function previewCampaign(){let seg=$('#campaignSegment').value,channel=$('#campaignChannel').value,list=segmentList(seg).filter(m=>channel==='both'||(channel==='whatsapp'?!!m.whatsapp:!!m.email));let msg=$('#campaignMessage').value;$('#campaignPreview').innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px"><b>${$('#campaignSubject').value||'Campaña'}</b><span class="badge-channel">${channel==='both'?'WHATSAPP + CORREO':channel.toUpperCase()}</span></div><p>${msg.replace('{nombre}',list[0]?.name||'Nombre del socio')}</p><hr style="border:0;border-top:1px solid #243244"><b>${list.length} destinatario(s)</b><div class="muted" style="margin-top:6px">${list.slice(0,6).map(m=>m.name).join(' · ')||'No hay clientes con consentimiento y datos válidos para este segmento.'}${list.length>6?' · …':''}</div>`}
+$('#previewCampaign').onclick=previewCampaign;$('#simulateCampaign').onclick=()=>{previewCampaign();let n=segmentList($('#campaignSegment').value).length;alert(n?`Prototipo: campaña preparada para ${n} cliente(s). En la versión real se conectaría WhatsApp Business y/o el proveedor de correo.`:'No hay destinatarios elegibles en este segmento.')};
+
+
+function money(n){return Number(n||0).toLocaleString('es-MX',{style:'currency',currency:'MXN'})}
+let receiptAfterPrint=null;
+function receiptMarkup(receipt){let lines=(receipt.items||[]).map(item=>`<div class="receipt-row"><span>${item.qty}× ${escapeHTML(item.name)}</span><span>${money(item.price*item.qty)}</span></div>`).join('');return `<h2>GYM ACCESS</h2><p style="text-align:center">Comprobante de pago · ${escapeHTML(receipt.type)}</p><hr><div class="receipt-row"><span>Folio</span><b>${escapeHTML(receipt.folio)}</b></div><div class="receipt-row"><span>Fecha</span><span>${escapeHTML(receipt.date)} · ${escapeHTML(receipt.time)}</span></div><div class="receipt-row"><span>Atendió</span><span>${escapeHTML(receipt.cashierName)}</span></div><hr><p><b>${escapeHTML(receipt.customer)}</b></p>${receipt.memberCode?`<p>Socio: ${escapeHTML(receipt.memberCode)}</p>`:''}${receipt.plan?`<p>Plan: ${escapeHTML(receipt.plan)}</p>`:''}${lines?`<div class="receipt-items">${lines}</div>`:''}<hr><div class="receipt-row"><b>TOTAL PAGADO</b><b>${money(receipt.total)}</b></div><div class="receipt-row"><span>Método</span><span>Efectivo</span></div>${receipt.cash!==undefined?`<div class="receipt-row"><span>Efectivo recibido</span><span>${money(receipt.cash)}</span></div><div class="receipt-row"><span>Cambio</span><span>${money(receipt.change)}</span></div>`:''}<hr><p style="text-align:center">Gracias por tu preferencia.</p>`}
+function finishReceipt(){if(!$('#receiptModal').classList.contains('open'))return;window.removeEventListener('afterprint',finishReceipt);document.body.classList.remove('printing-receipt');$('#receiptModal').classList.remove('open');let callback=receiptAfterPrint;receiptAfterPrint=null;if(callback)callback()}
+function openReceipt(receipt,afterPrint=null){$('#receiptContent').innerHTML=receiptMarkup(receipt);receiptAfterPrint=afterPrint;$('#receiptModal').classList.add('open');window.addEventListener('afterprint',finishReceipt,{once:true});setTimeout(()=>{if(!$('#receiptModal').classList.contains('open'))return;document.body.classList.add('printing-receipt');window.print()},250)}
+$('#printReceipt').addEventListener('click',()=>{document.body.classList.add('printing-receipt');window.print()});$('#closeReceipt').addEventListener('click',finishReceipt);$('#receiptModal').addEventListener('click',event=>{if(event.target.id==='receiptModal')finishReceipt()});
+function cartTotalValue(){return cart.reduce((s,i)=>s+i.price*i.qty,0)}
+function renderProducts(){let q=($('#productSearch')?.value||'').toLowerCase().trim(),cat=$('#productCategory')?.value||'all';let list=products.filter(p=>(cat==='all'||p.category===cat)&&(!q||p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q)));$('#productGrid').innerHTML=list.length?list.map(p=>`<div class="product-card ${p.stock<=0?'out':''}" data-pid="${escapeHTML(p.id)}"><div class="product-emoji">${escapeHTML(p.emoji)}</div><div class="product-name">${escapeHTML(p.name)}</div><div class="product-meta">${escapeHTML(p.category)} · Stock: <span class="${p.stock<=3?'stock-low':''}">${p.stock}</span></div><div class="product-price">${money(p.price)}</div></div>`).join(''):'<div class="empty" style="grid-column:1/-1">No hay productos que coincidan.</div>';$$('.product-card:not(.out)').forEach(el=>el.onclick=()=>addToCart(el.dataset.pid))}
+function addToCart(id){let p=products.find(x=>x.id===id);if(!p||p.stock<=0)return;let i=cart.find(x=>x.id===id);if(i){if(i.qty>=p.stock)return alert('No hay más unidades disponibles en stock.');i.qty++}else cart.push({id:p.id,name:p.name,price:p.price,qty:1});renderCart()}
+function changeQty(id,delta){let i=cart.find(x=>x.id===id),p=products.find(x=>x.id===id);if(!i||!p)return;i.qty+=delta;if(i.qty<=0)cart=cart.filter(x=>x.id!==id);else if(i.qty>p.stock)i.qty=p.stock;renderCart()}
+window.changeQty=changeQty;
+function renderCart(){let total=cartTotalValue();$('#cartList').innerHTML=cart.length?cart.map(i=>`<div class="cart-row"><div><b>${escapeHTML(i.name)}</b><div class="muted">${money(i.price)} c/u</div></div><div style="text-align:right"><div class="qty"><button onclick="changeQty('${escapeHTML(i.id)}',-1)">−</button><b>${i.qty}</b><button onclick="changeQty('${escapeHTML(i.id)}',1)">+</button></div><b>${money(i.price*i.qty)}</b></div></div>`).join(''):'<div class="cart-empty">Selecciona productos para iniciar la venta.</div>';$('#cartTotal').textContent=money(total);updateChange()}
+function updateChange(){let total=cartTotalValue(),cash=Number($('#cashReceived')?.value||0),change=cash-total;$('#cashChange').textContent=money(Math.max(0,change));$('#cashChange').style.color=cash>=total&&total>0?'var(--accent)':'var(--text)'}
+function renderSales(){$('#posLowStock').textContent=products.filter(p=>p.stock<=3).length}
+function renderPOS(){renderProducts();renderCart();renderSales();resolvePosMember();renderCashierState()}
+$('#productEmojiNew').addEventListener('change',event=>{$('#productEmojiPreview').textContent=event.target.value});
+$('#productForm').addEventListener('submit',event=>{
+  event.preventDefault();
+  let message=$('#productFormMessage'),name=$('#productName').value.trim(),price=Number($('#productPriceNew').value),stock=Number($('#productStockNew').value);
+  if(currentRole!=='owner'||!ownerUnlocked){message.textContent='Entra al perfil del dueño para agregar productos.';return}
+  if(!name||/[<>]/.test(name)){message.textContent='Escribe un nombre válido sin los caracteres < o >.';$('#productName').focus();return}
+  if(!Number.isFinite(price)||price<=0){message.textContent='Escribe un precio mayor que cero.';$('#productPriceNew').focus();return}
+  if(!Number.isSafeInteger(stock)||stock<0){message.textContent='Escribe una cantidad entera de cero o más.';$('#productStockNew').focus();return}
+  let id;
+  try{
+    do{id=`P${randomHex(5).toUpperCase()}`}while(products.some(product=>product.id===id));
+    products.push({id,name,category:$('#productCategoryNew').value,price,stock,emoji:$('#productEmojiNew').value,updatedAt:new Date().toISOString()});
+    save();
+  }catch(error){
+    if(id){products=products.filter(product=>product.id!==id);productSaveSnapshot.delete(id)}
+    console.error('No se pudo agregar el producto:',error);
+    message.textContent='No se pudo guardar el producto. Verifica el almacenamiento e inténtalo nuevamente.';
+    return;
+  }
+  event.target.reset();
+  $('#productEmojiPreview').textContent=$('#productEmojiNew').value;
+  renderAll();
+  message.textContent=`${name} se agregó al inventario y ya está disponible en el POS.`;
+  $('#productName').focus();
+});
+function resolvePosMember(){let code=($('#posMemberCode')?.value||'').trim().toUpperCase();let m=members.find(x=>x.code.toUpperCase()===code);$('#posMemberName').textContent=m?`${m.name} · ${planLabel(m.plan)}`:'Venta a público general'}
+function completeSale(){if(!activeCashier)return alert('Inicia sesión con el usuario de recepción antes de cobrar.');let total=cartTotalValue();if(!cart.length)return alert('Agrega al menos un producto.');let cash=Number($('#cashReceived').value||0);if(cash<total)return alert(`Faltan ${money(total-cash)} para completar el pago.`);for(let item of cart){let p=products.find(x=>x.id===item.id);if(!p||p.stock<item.qty)return alert(`Stock insuficiente para ${item.name}.`)}let code=$('#posMemberCode').value.trim().toUpperCase(),m=members.find(x=>x.code.toUpperCase()===code);let now=new Date(),folio='VTA-'+String((sales.at(-1)?.seq||0)+1).padStart(5,'0'),seq=(sales.at(-1)?.seq||0)+1,items=cart.map(x=>({...x})),time=now.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});cart.forEach(i=>{let p=products.find(x=>x.id===i.id);p.stock-=i.qty});sales.push({seq,folio,date:iso(now),time,ts:now.toISOString(),memberCode:m?.code||'',memberName:m?.name||'',cashierId:activeCashier.id,cashierName:activeCashier.name,items,total,cash,change:cash-total});save();$('#saleMessage').innerHTML=`<div class="sale-ok"><b>Venta ${folio} registrada.</b> El ticket se está imprimiendo.</div>`;cart=[];$('#cashReceived').value='';renderAll();openReceipt({type:'Productos',folio,date:fmt(iso(now)),time,cashierName:activeCashier.name,customer:m?.name||'Público general',memberCode:m?.code||'',items,total,cash,change:cash-total})}
+$('#productSearch').addEventListener('input',renderProducts);$('#productCategory').addEventListener('change',renderProducts);$('#cashReceived').addEventListener('input',updateChange);$('#posMemberCode').addEventListener('input',resolvePosMember);$$('.quick-cash').forEach(b=>b.onclick=()=>{$('#cashReceived').value=Number($('#cashReceived').value||0)+Number(b.dataset.cash);updateChange()});$('#paySale').onclick=completeSale;$('#clearCart').onclick=()=>{cart=[];$('#cashReceived').value='';$('#saleMessage').innerHTML='';renderCart()};
+
+function normalizeFingerprintId(value){return String(value||'').trim().toUpperCase()}
+let fingerprintTargetCode=null;
+window.registerFingerprint=code=>{let m=members.find(x=>x.code===code);if(!m)return;fingerprintTargetCode=code;$('#fingerprintLinkMember').textContent=m.name+' · '+m.code;$('#fingerprintLinkForm').reset();$('#fingerprintLinkMessage').textContent='Selecciona el campo y pasa el dedo por el lector USB.';$('#fingerprintModal').classList.add('open');$('#fingerprintLinkValue').focus()};
+$('#closeFingerprintModal').onclick=()=>$('#fingerprintModal').classList.remove('open');
+$('#fingerprintModal').addEventListener('click',e=>{if(e.target.id==='fingerprintModal')e.currentTarget.classList.remove('open')});
+$('#fingerprintLinkForm').addEventListener('submit',e=>{e.preventDefault();let message=$('#fingerprintLinkMessage'),m=members.find(x=>x.code===fingerprintTargetCode),fingerprintId=normalizeFingerprintId($('#fingerprintLinkValue').value);if(!m){message.textContent='No se encontró al socio seleccionado.';return}if(!fingerprintId){message.textContent='El lector no envió un identificador.';return}if(members.some(x=>x.code!==m.code&&normalizeFingerprintId(x.fingerprintId)===fingerprintId)){message.textContent='Esta huella ya está vinculada a otro socio.';return}try{m.fingerprintId=fingerprintId;save();renderAll();$('#fingerprintModal').classList.remove('open')}catch(error){console.error('No se pudo vincular la huella:',error);message.textContent='No se pudo guardar la huella en este navegador.'}});
+window.renew=c=>{let m=members.find(x=>x.code===c);if(!m)return;let base=daysLeft(m.end)<0?iso(new Date()):m.end;m.start=base;m.end=addPlan(base,m.plan);save();renderAll()};
+function renderAll(){if(currentRole==='cashier')syncLowStockNotifications();renderDashboard();renderOwnerNotifications();renderDashboardSales();renderRestockForm();renderRestockHistory();renderMembers($('#memberSearch').value||'');renderHistory();renderMarketing();renderCashierState();renderPOS()}
+$('#memberSearch').addEventListener('input',e=>renderMembers(e.target.value));
+$('#memberForm').addEventListener('submit',async e=>{e.preventDefault();let message=$('#membershipMessage');if(!activeCashier){message.textContent='Inicia sesión como recepción desde la barra superior antes de registrar un pago.';return}let fingerprintId=normalizeFingerprintId($('#fingerprintId').value);if(!fingerprintId){message.textContent='Escanea la huella del socio antes de guardar.';$('#fingerprintId').focus();return}if(members.some(m=>normalizeFingerprintId(m.fingerprintId)===fingerprintId)){message.textContent='Esta huella ya está vinculada a otro socio.';$('#fingerprintId').focus();return}let amount=Number($('#membershipAmount').value);if(!Number.isFinite(amount)||amount<0){message.textContent='Escribe un importe válido para el pago de la membresía.';return}try{let photo='',file=$('#photo').files[0];if(file)photo=await new Promise((resolve,reject)=>{let reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(reader.error);reader.readAsDataURL(file)});let next=members.length?Math.max(...members.map(m=>parseInt(m.code.split('-')[1])||0))+1:1,start=$('#start').value,plan=$('#plan').value,now=new Date(),time=now.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}),pro=rentalPlan==='pro',m={code:codeFor(next),name:$('#name').value.trim(),phone:$('#phone').value.trim(),fingerprintId,email:pro?$('#email').value.trim():'',whatsapp:pro?$('#whatsapp').value.trim():'',promoConsent:pro?$('#promoConsent').checked:false,contactPref:pro?$('#contactPref').value:'none',birth:$('#birth').value,plan,start,end:addPlan(start,plan),photo,visits:0,created:now.toISOString(),suspended:false};let paymentSeq=(membershipPayments.at(-1)?.seq||0)+1,folio='MEM-'+String(paymentSeq).padStart(5,'0');members.push(m);membershipPayments.push({seq:paymentSeq,folio,date:iso(now),time,ts:now.toISOString(),memberCode:m.code,memberName:m.name,plan,amount,cashierId:activeCashier.id,cashierName:activeCashier.name});save();notifyOwner('new_member','Nuevo socio registrado',`${m.name} (${m.code}) fue registrado en mostrador.`);renderAll();e.target.reset();$('#start').value=iso(new Date());$('#fingerprintId').focus();message.textContent=`Pago ${folio} registrado. El ticket se está imprimiendo.`;openReceipt({type:'Membresía',folio,date:fmt(iso(now)),time,cashierName:activeCashier.name,customer:m.name,plan:planLabel(m.plan),total:amount})}catch(error){console.error('No se pudo registrar el pago de la membresía:',error);message.textContent='No se pudo registrar el pago. Verifica los datos e inténtalo nuevamente.'}});
+$('#fillDemo').onclick=()=>{$('#name').value='Carlos Hernández';$('#phone').value='222 555 0134';$('#plan').value='month';$('#start').value=iso(new Date());$('#membershipAmount').value='500';if(rentalPlan==='pro'){$('#email').value='carlos@ejemplo.com';$('#whatsapp').value='2225550134';$('#promoConsent').checked=true;$('#contactPref').value='both'}$('#fingerprintId').focus()};
+function checkAccess(){let fingerprintId=normalizeFingerprintId($('#accessCode').value);let m=members.find(x=>normalizeFingerprintId(x.fingerprintId)===fingerprintId);if(!fingerprintId||!m){$('#accessResult').innerHTML='<div class="access-result big-bad"><div class="huge">SOCIO NO ENCONTRADO</div><div class="muted">Escanea una huella registrada con el lector.</div></div>';$('#accessCode').value='';$('#accessCode').focus();return}let st=memberStatus(m);if(st[0]==='Vencido'||st[0]==='Suspendido'){$('#accessResult').innerHTML=`<div class="access-result big-bad"><div class="huge">🔴 ACCESO DENEGADO</div><div class="profile-mini"><img class="avatar" src="${m.photo||placeholder(m.name)}"><div style="text-align:left"><b>${m.name}</b><br><span class="muted">${m.code}</span><br>Membresía ${st[0].toLowerCase()} · ${st[0]==='Vencido'?'Venció '+fmt(m.end):'Acceso suspendido'}</div></div></div>`;$('#accessCode').value='';$('#accessCode').focus();return}let now=new Date();history.push({code:m.code,name:m.name,date:iso(now),time:now.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}),ts:now.toISOString()});m.visits=(m.visits||0)+1;save();renderAll();$('#accessResult').innerHTML=`<div class="access-result big-ok"><div class="huge">🟢 ACCESO PERMITIDO</div><div class="profile-mini"><img class="avatar" src="${m.photo||placeholder(m.name)}"><div style="text-align:left"><b>${m.name}</b><br><span class="muted">${m.code}</span><br>${planLabel(m.plan)} · Vence ${fmt(m.end)}<br><b>Visita #${m.visits}</b></div></div></div>`;$('#accessCode').value='';$('#accessCode').focus()}
+$('#checkAccess').onclick=checkAccess;$('#accessCode').addEventListener('keydown',e=>{if(e.key==='Enter')checkAccess()});
+function navigate(id){let navButton=$(`.nav button[data-go="${id}"]`),ownerPages=['dashboard','members','history','marketing'],cashierPages=['register','members','access','pos'];if(!navButton||navButton.hidden||!(currentRole==='owner'?ownerPages:cashierPages).includes(id))return;$$('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.go===id));$$('.section').forEach(s=>s.classList.remove('active'));$('#'+id).classList.add('active');$('#pageTitle').textContent={dashboard:'Dashboard',register:'Registrar miembro',members:'Miembros',access:'Control de acceso',history:'Historial',marketing:'Marketing y promociones',pos:'POS · Tienda del gimnasio'}[id];if(id==='access')setTimeout(()=>$('#accessCode').focus(),50);if(id==='marketing')renderMarketing();if(id==='pos')renderPOS()}
+$$('.nav button, [data-go="members"].btn').forEach(b=>b.onclick=()=>navigate(b.dataset.go));
+function chooseCashierMode(){ownerUnlocked=false;pendingOwnerMode=false;closeOwnerModal();setInterfaceRole('cashier')}
+$('#cashierModeBtn').addEventListener('click',chooseCashierMode);
+$('#ownerModeBtn').addEventListener('click',chooseOwnerMode);
+$('#cashierSetupButton').addEventListener('click',chooseOwnerMode);
+$('#campaignSegment').onchange=()=>{renderMarketing();previewCampaign()};$('#campaignChannel').onchange=previewCampaign;
+$('#start').value=iso(new Date());$('#today').textContent=new Date().toLocaleDateString('es-MX',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});setInterfaceRole('cashier');updateRentalPlanUI();renderAll();
+let installPrompt=null;
+const installButton=$('#installApp');
+window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();installPrompt=event;installButton.style.display='inline-flex'});
+installButton.addEventListener('click',async()=>{if(!installPrompt)return;await installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installButton.style.display='none'});
+window.addEventListener('appinstalled',()=>{installPrompt=null;installButton.style.display='none'});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./service-worker.js').catch(error=>console.error('No se pudo registrar el service worker:',error));
+startCloudSync();
+</script>
+</body>
+</html>
